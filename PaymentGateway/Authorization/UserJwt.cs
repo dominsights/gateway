@@ -1,4 +1,6 @@
-﻿namespace BackendTraining.Services
+﻿using System;
+
+namespace BackendTraining.Services
 {
     public class UserJwt
     {
@@ -8,6 +10,6 @@
 
         public string Token { get; set; }
         public long ExpiresIn { get; set; }
-        public int Id { get; internal set; }
+        public Guid Id { get; internal set; }
     }
 }

@@ -2,41 +2,64 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using BackendTraining.Services;
+using PaymentGateway.Domain;
 
 namespace PaymentGateway.Authorization
 {
     public class AuthService
     {
         private JwtHandler _jwtHandler;
-        private List<User> _users;
 
-        public UserJwt LoginAsync(string userName, string password)
+        private readonly IUserAccountRepository _userAccountRepository;
+
+
+
+        public async Task<UserAccount> SaveAsync(string username, string password)
+        {
+            var hashedPassword = PasswordService.GenerateHashedPassword(password);
+
+            var userAccount = new UserAccount
+            {
+                Id = new Guid(),
+                Password = hashedPassword.Hash,
+                Salt = hashedPassword.Salt,
+                Username = username
+            };
+
+            await _userAccountRepository.SaveAsync(userAccount);
+
+            return userAccount;
+        }
+
+        public async Task<UserJwt> LoginAsync(string userName, string password)
         {
             try
             {
-                var userIdentity = _users.First(u => u.UserName.Equals(userName) && u.Password.Equals(password));
-                var jwt = _jwtHandler.Create(userIdentity.Id.ToString());
-                var payload = new UserJwt() { Id = userIdentity.Id, Token = jwt.Token, ExpiresIn = jwt.Expires };
+                var user = await _userAccountRepository.GetByUsernameAsync(userName);
+
+                if (!PasswordService.IsPasswordValid(password, user.Password, user.Salt))
+                {
+                    throw new InvalidCredentialException("Username or password doesn't match!");
+                }
+
+                var jwt = _jwtHandler.Create(user.Id.ToString());
+                var payload = new UserJwt() { Id = user.Id, Token = jwt.Token, ExpiresIn = jwt.Expires };
 
                 return payload;
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return null;
             }
         }
 
-        public AuthService(JwtHandler jwtHandler)
+        public AuthService(JwtHandler jwtHandler, IUserAccountRepository userAccountRepository)
         {
             _jwtHandler = jwtHandler;
-
-            _users = new List<User>()
-            {
-                new User() {Id = 1, UserName = "domicio", Password = "password" },
-                new User() {Id = 1, UserName = "test", Password = "test" }
-            };
+            _userAccountRepository = userAccountRepository;
         }
 
         private async Task<string> ReadStringFromFileAsync(string path)

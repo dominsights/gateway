@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PaymentGateway.Authorization;
+using PaymentGateway.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace PaymentGateway
 {
@@ -32,8 +34,14 @@ namespace PaymentGateway
             var config = Configuration.GetSection("jwt");
             services.AddTransient<AuthService>();
             services.AddTransient<JwtHandler>();
+            services.AddTransient<IUserAccountRepository, UserAccountRepository>();
             services.Configure<JwtSettings>(config);
             services.AddControllers();
+
+            services.AddDbContext<UserAccountDbContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var jwtSettings = new JwtSettings();
             config.Bind(jwtSettings);
