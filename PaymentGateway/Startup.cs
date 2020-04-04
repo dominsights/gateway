@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BackendTraining.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using PaymentGateway.Authorization;
 
 namespace PaymentGateway
 {
@@ -25,7 +29,26 @@ namespace PaymentGateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = Configuration.GetSection("jwt");
+            services.AddTransient<AuthService>();
+            services.AddTransient<JwtHandler>();
+            services.Configure<JwtSettings>(config);
             services.AddControllers();
+
+            var jwtSettings = new JwtSettings();
+            config.Bind(jwtSettings);
+            var jwtHandler = new JwtHandler(Options.Create(jwtSettings));
+
+            services.AddAuthentication(configuration =>
+                {
+                    configuration.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    configuration.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(configuration =>
+                {
+                    configuration.SaveToken = true;
+                    configuration.TokenValidationParameters = jwtHandler.Parameters;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +63,7 @@ namespace PaymentGateway
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

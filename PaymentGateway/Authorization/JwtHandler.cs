@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using System.Xml;
 using BackendTraining.Services;
 using Microsoft.Extensions.Options;
@@ -9,7 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PaymentGateway.Authorization
 {
-    public class JwtHandler
+    public class JwtHandler : IDisposable
     {
         private readonly JwtSettings _settings;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -17,6 +19,9 @@ namespace PaymentGateway.Authorization
         private SigningCredentials _signingCredentials;
         private JwtHeader _jwtHeader;
         public TokenValidationParameters Parameters { get; private set; }
+
+        private RSA _publicRsa;
+        private RSA _privateRsa;
 
         public JwtHandler(IOptions<JwtSettings> settings)
         {
@@ -27,23 +32,22 @@ namespace PaymentGateway.Authorization
 
         private void InitializeRsa()
         {
-            using (RSA publicRsa = RSA.Create())
-            {
-                var publicKeyXml = File.ReadAllText(_settings.PublicKeyXML);
-                publicRsa.RsaFromXmlString(publicKeyXml);
-                _issuerSigningKey = new RsaSecurityKey(publicRsa);
-            }
+            _publicRsa = RSA.Create();
+            var publicKeyXml = File.ReadAllText(_settings.PublicKeyXML);
+            _publicRsa.RsaFromXmlString(publicKeyXml);
+            _issuerSigningKey = new RsaSecurityKey(_publicRsa);
+
             if (string.IsNullOrWhiteSpace(_settings.PrivateKeyXML))
             {
                 return;
             }
-            using (RSA privateRsa = RSA.Create())
-            {
-                var privateKeyXml = File.ReadAllText(_settings.PrivateKeyXML);
-                privateRsa.RsaFromXmlString(privateKeyXml);
-                var privateKey = new RsaSecurityKey(privateRsa);
-                _signingCredentials = new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);
-            }
+
+            _privateRsa = RSA.Create();
+
+            var privateKeyXml = File.ReadAllText(_settings.PrivateKeyXML);
+            _privateRsa.RsaFromXmlString(privateKeyXml);
+            var privateKey = new RsaSecurityKey(_privateRsa);
+            _signingCredentials = new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);
         }
 
         private void InitializeJwtParameters()
@@ -51,6 +55,7 @@ namespace PaymentGateway.Authorization
             _jwtHeader = new JwtHeader(_signingCredentials);
             Parameters = new TokenValidationParameters
             {
+                ValidateIssuerSigningKey = true,
                 ValidateAudience = false,
                 ValidIssuer = _settings.Issuer,
                 IssuerSigningKey = _issuerSigningKey
@@ -63,19 +68,24 @@ namespace PaymentGateway.Authorization
             var expires = nowUtc.AddMinutes(5);
             var centuryBegin = new DateTime(1970, 1, 1);
             var exp = (long)(new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var now = (long)(new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
             var issuer = _settings.Issuer ?? string.Empty;
-            var payload = new JwtPayload
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                {"sub", userId},
-                {"unique_name", userId},
-                {"iss", issuer},
-                {"iat", now},
-                {"nbf", now},
-                {"exp", exp},
-                {"jti", Guid.NewGuid().ToString("N")}
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, userId)
+                }),
+                IssuedAt = nowUtc,
+                Expires = expires,
+                NotBefore = nowUtc,
+                Issuer = issuer,
+                SigningCredentials = _signingCredentials
             };
-            var jwt = new JwtSecurityToken(_jwtHeader, payload);
+
+            var jwt = tokenHandler.CreateToken(tokenDescriptor);
             var token = _jwtSecurityTokenHandler.WriteToken(jwt);
 
             return new JWT
@@ -83,6 +93,12 @@ namespace PaymentGateway.Authorization
                 Token = token,
                 Expires = exp
             };
+        }
+
+        public void Dispose()
+        {
+            _publicRsa?.Dispose();
+            _privateRsa?.Dispose();
         }
     }
 

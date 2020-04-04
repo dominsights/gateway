@@ -6,7 +6,7 @@ using PaymentGateway.Authorization;
 namespace PaymentGateway.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
