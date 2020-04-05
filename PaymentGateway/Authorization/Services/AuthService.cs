@@ -20,7 +20,6 @@ namespace PaymentGateway.Authorization.Services
 
             var userAccount = new UserAccount
             {
-                Id = new Guid(),
                 Password = hashedPassword.Hash,
                 Salt = hashedPassword.Salt,
                 Username = username

@@ -13,9 +13,9 @@ namespace PaymentGateway.Payments.Services
 {
     public class PaymentDto
     {
-        public Guid Id { get; internal set; }
+        public Guid Id { get; set; }
         [Required]
-        public Guid UserId { get; internal set; }
+        public Guid UserId { get; set; }
         [Required]
         public string CardNumber { get; set; }
         [Required]
