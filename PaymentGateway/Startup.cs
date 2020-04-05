@@ -14,8 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PaymentGateway.Authorization;
-using PaymentGateway.Domain;
 using Microsoft.EntityFrameworkCore;
+using PaymentGateway.Authorization.Data;
+using PaymentGateway.Authorization.Services;
 
 namespace PaymentGateway
 {

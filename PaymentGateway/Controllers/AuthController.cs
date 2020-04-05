@@ -3,6 +3,7 @@ using BackendTraining.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PaymentGateway.Authorization;
+using PaymentGateway.Authorization.Services;
 
 namespace PaymentGateway.Controllers
 {
@@ -15,7 +16,7 @@ namespace PaymentGateway.Controllers
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody]User credentials)
+        public async Task<IActionResult> Login([FromBody]Login credentials)
         {
             var userPayload = await _authService.LoginAsync(credentials.UserName, credentials.Password);
 

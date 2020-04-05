@@ -3,13 +3,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 using System.Xml;
-using BackendTraining.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace PaymentGateway.Authorization
+namespace PaymentGateway.Authorization.Services
 {
     public class JwtHandler : IDisposable
     {

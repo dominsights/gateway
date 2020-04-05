@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace PaymentGateway.Domain
+namespace PaymentGateway.Authorization.Data
 {
     public interface IUserAccountRepository
     {

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Authentication;
 using System.Threading.Tasks;
-using BackendTraining.Services;
-using PaymentGateway.Domain;
+using PaymentGateway.Authorization.Data;
 
-namespace PaymentGateway.Authorization
+namespace PaymentGateway.Authorization.Services
 {
     public class AuthService
     {

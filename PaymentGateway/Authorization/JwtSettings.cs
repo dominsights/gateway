@@ -1,4 +1,4 @@
-﻿namespace BackendTraining.Services
+﻿namespace PaymentGateway.Authorization
 {
     public class JwtSettings
     {

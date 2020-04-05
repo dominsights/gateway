@@ -1,4 +1,4 @@
-﻿namespace PaymentGateway.Domain
+﻿namespace PaymentGateway.Authorization
 {
     internal class Password
     {

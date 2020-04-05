@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PaymentGateway.Authorization.Data;
@@ -9,9 +10,10 @@ using PaymentGateway.Authorization.Data;
 namespace PaymentGateway.Migrations
 {
     [DbContext(typeof(UserAccountDbContext))]
-    partial class UserAccountDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200405064706_AddValidation")]
+    partial class AddValidation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

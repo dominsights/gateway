@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace PaymentGateway.Domain
+namespace PaymentGateway.Authorization.Data
 {
     public class UserAccountRepository : IUserAccountRepository
     {
