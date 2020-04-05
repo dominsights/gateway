@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using PaymentGateway.Authorization;
 using PaymentGateway.Authorization.Services;
 
-namespace PaymentGateway.Controllers
+namespace PaymentGateway.Authorization.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

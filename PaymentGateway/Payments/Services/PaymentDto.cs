@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace PaymentGateway.Model
+/* Assumptions:
+ * - Currency code is 3 chars length, example: (EUR, USD, BRL);
+ * - CVV size is always 3 chars long;
+ */
+
+namespace PaymentGateway.Payments.Services
 {
-    public class PaymentInput
+    public class PaymentDto
     {
+        public Guid Id { get; internal set; }
+        [Required]
+        public Guid UserId { get; internal set; }
         [Required]
         public string CardNumber { get; set; }
         [Required]

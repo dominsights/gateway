@@ -17,8 +17,7 @@ using PaymentGateway.Authorization;
 using Microsoft.EntityFrameworkCore;
 using PaymentGateway.Authorization.Data;
 using PaymentGateway.Authorization.Services;
-using PaymentGateway.Model;
-using PaymentGateway.Payments.Application;
+using PaymentGateway.Payments.Services;
 using PaymentGateway.Mapper;
 
 namespace PaymentGateway
@@ -39,7 +38,7 @@ namespace PaymentGateway
             services.AddTransient<AuthService>();
             services.AddTransient<JwtHandler>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
-            services.AddTransient<IPaymentAppService, PaymentAppService>();
+            services.AddTransient<IPaymentService, PaymentService>();
             services.Configure<JwtSettings>(config);
             services.AddControllers();
 

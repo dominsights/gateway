@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using PaymentGateway.Model;
-using PaymentGateway.Payments.Application;
+using PaymentGateway.Payments.Models;
+using PaymentGateway.Payments.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

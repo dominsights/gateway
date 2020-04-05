@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PaymentGateway.Payments.Application
+namespace PaymentGateway.Payments.Services
 {
-    public interface IPaymentAppService
+    public interface IPaymentService
     {
         Task<Guid> ProcessPaymentAsync(PaymentDto dto);
     }

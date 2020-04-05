@@ -7,21 +7,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PaymentGateway.Model;
-using PaymentGateway.Payments.Application;
+using PaymentGateway.Payments.Models;
+using PaymentGateway.Payments.Services;
 
-namespace PaymentGateway.Controllers
+namespace PaymentGateway.Payments.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private IPaymentAppService _paymentAppService;
+        private IPaymentService _paymentAppService;
         private ILogger<PaymentController> _logger;
         private IMapper _mapper;
 
-        public PaymentController(IPaymentAppService paymentAppService, ILogger<PaymentController> logger, IMapper mapper)
+        public PaymentController(IPaymentService paymentAppService, ILogger<PaymentController> logger, IMapper mapper)
         {
             _paymentAppService = paymentAppService;
             _logger = logger;
