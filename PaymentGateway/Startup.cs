@@ -17,6 +17,9 @@ using PaymentGateway.Authorization;
 using Microsoft.EntityFrameworkCore;
 using PaymentGateway.Authorization.Data;
 using PaymentGateway.Authorization.Services;
+using PaymentGateway.Model;
+using PaymentGateway.Payments.Application;
+using PaymentGateway.Mapper;
 
 namespace PaymentGateway
 {
@@ -36,6 +39,7 @@ namespace PaymentGateway
             services.AddTransient<AuthService>();
             services.AddTransient<JwtHandler>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+            services.AddTransient<IPaymentAppService, PaymentAppService>();
             services.Configure<JwtSettings>(config);
             services.AddControllers();
 
@@ -58,6 +62,13 @@ namespace PaymentGateway
                     configuration.SaveToken = true;
                     configuration.TokenValidationParameters = jwtHandler.Parameters;
                 });
+
+            var mapperConfig = new AutoMapper.MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<PaymentProfile>();
+            });
+
+            services.AddSingleton(mapperConfig.CreateMapper());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

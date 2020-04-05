@@ -63,7 +63,7 @@ namespace PaymentGateway.Authorization.Services
         public JWT Create(string userId)
         {
             var nowUtc = DateTime.UtcNow;
-            var expires = nowUtc.AddMinutes(5);
+            var expires = nowUtc.AddDays(2);
             var centuryBegin = new DateTime(1970, 1, 1);
             var exp = (long)(new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
             var issuer = _settings.Issuer ?? string.Empty;
