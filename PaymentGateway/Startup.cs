@@ -65,10 +65,7 @@ namespace PaymentGateway
                     configuration.TokenValidationParameters = jwtHandler.Parameters;
                 });
 
-            var mapperConfig = new AutoMapper.MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<PaymentProfile>();
-            });
+            var mapperConfig = MapperConfigurationFactory.MapperConfiguration;
 
             services.AddSingleton(mapperConfig.CreateMapper());
         }

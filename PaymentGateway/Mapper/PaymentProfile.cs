@@ -12,7 +12,9 @@ namespace PaymentGateway.Mapper
     {
         public PaymentProfile()
         {
-            CreateMap<PaymentInput, PaymentDto>();
+            CreateMap<PaymentInput, PaymentDto>()
+                .ForMember(p => p.UserId, opt => opt.Ignore())
+                .ForMember(p => p.Id, opt => opt.Ignore());
         }
     }
 }
