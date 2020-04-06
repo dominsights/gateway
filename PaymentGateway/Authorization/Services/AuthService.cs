@@ -6,17 +6,16 @@ using PaymentGateway.Authorization.Data;
 
 namespace PaymentGateway.Authorization.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        private JwtHandler _jwtHandler;
+        private IJwtHandler _jwtHandler;
 
         private readonly IUserAccountRepository _userAccountRepository;
-
-
+        private readonly IPasswordService _passwordService;
 
         public async Task<UserAccount> SaveAsync(string username, string password)
         {
-            var hashedPassword = PasswordService.GenerateHashedPassword(password);
+            var hashedPassword = _passwordService.GenerateHashedPassword(password);
 
             var userAccount = new UserAccount
             {
@@ -36,7 +35,7 @@ namespace PaymentGateway.Authorization.Services
             {
                 var user = await _userAccountRepository.GetByUsernameAsync(userName);
 
-                if (!PasswordService.IsPasswordValid(password, user.Password, user.Salt))
+                if (!_passwordService.IsPasswordValid(password, user.Password, user.Salt))
                 {
                     throw new InvalidCredentialException("Username or password doesn't match!");
                 }
@@ -46,28 +45,17 @@ namespace PaymentGateway.Authorization.Services
 
                 return payload;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return null;
             }
         }
 
-        public AuthService(JwtHandler jwtHandler, IUserAccountRepository userAccountRepository)
+        public AuthService(IJwtHandler jwtHandler, IUserAccountRepository userAccountRepository, IPasswordService passwordService)
         {
             _jwtHandler = jwtHandler;
             _userAccountRepository = userAccountRepository;
-        }
-
-        private async Task<string> ReadStringFromFileAsync(string path)
-        {
-            if(File.Exists(path))
-            {
-                return await File.ReadAllTextAsync(path);
-            }
-            else
-            {
-                throw new ArgumentException("You need to provide your own .key files.");
-            }
+            _passwordService = passwordService;
         }
     }
 }

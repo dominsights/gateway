@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BackendTraining.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,7 @@ namespace PaymentGateway.Authorization.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private AuthService _authService;
+        private IAuthService _authService;
         private ILogger<AuthController> _logger;
 
         [AllowAnonymous]
@@ -53,7 +52,7 @@ namespace PaymentGateway.Authorization.Controllers
         }
 
 
-        public AuthController(AuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
             _logger = logger;

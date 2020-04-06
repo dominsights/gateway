@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackendTraining.Services
+namespace PaymentGateway.Authorization
 {
     public class Login
     {

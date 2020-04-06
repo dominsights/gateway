@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BackendTraining.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,10 +35,10 @@ namespace PaymentGateway
         {
             var config = Configuration.GetSection("jwt");
             var rabbitMqConfig = Configuration.GetSection("rabbitMq");
-            services.AddTransient<AuthService>();
-            services.AddTransient<JwtHandler>();
+            services.AddTransient<IJwtHandler, JwtHandler>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
             services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IMessagingService, RabbitMqService>();
             services.Configure<JwtSettings>(config);
             services.Configure<RabbitMqConfig>(rabbitMqConfig);

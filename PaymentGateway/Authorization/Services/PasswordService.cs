@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace PaymentGateway.Authorization.Services
 {
-    internal static class PasswordService
+    public class PasswordService : IPasswordService
     {
-        public static Password GenerateHashedPassword(string password)
+        public Password GenerateHashedPassword(string password)
         {
             byte[] salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
@@ -24,7 +24,7 @@ namespace PaymentGateway.Authorization.Services
             return new Password { Hash = Convert.ToBase64String(hashed), Salt = Convert.ToBase64String(salt) };
         }
 
-        public static bool IsPasswordValid(string password, string storedHash, string storedSalt)
+        public bool IsPasswordValid(string password, string storedHash, string storedSalt)
         {
             byte[] salt = Convert.FromBase64String(storedSalt);
 

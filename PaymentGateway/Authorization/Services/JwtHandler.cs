@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PaymentGateway.Authorization.Services
 {
-    public class JwtHandler : IDisposable
+    public class JwtHandler : IDisposable, IJwtHandler
     {
         private readonly JwtSettings _settings;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
