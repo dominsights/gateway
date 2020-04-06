@@ -31,24 +31,17 @@ namespace PaymentGateway.Authorization.Services
 
         public async Task<UserJwt> LoginAsync(string userName, string password)
         {
-            try
+            var user = await _userAccountRepository.GetByUsernameAsync(userName);
+
+            if (!_passwordService.IsPasswordValid(password, user.Password, user.Salt))
             {
-                var user = await _userAccountRepository.GetByUsernameAsync(userName);
-
-                if (!_passwordService.IsPasswordValid(password, user.Password, user.Salt))
-                {
-                    throw new InvalidCredentialException("Username or password doesn't match!");
-                }
-
-                var jwt = _jwtHandler.Create(user.Id.ToString());
-                var payload = new UserJwt() { Id = user.Id, Token = jwt.Token, ExpiresIn = jwt.Expires };
-
-                return payload;
+                throw new InvalidCredentialException("Username or password doesn't match!");
             }
-            catch (Exception)
-            {
-                return null;
-            }
+
+            var jwt = _jwtHandler.Create(user.Id.ToString());
+            var payload = new UserJwt() { Id = user.Id, Token = jwt.Token, ExpiresIn = jwt.Expires };
+
+            return payload;
         }
 
         public AuthService(IJwtHandler jwtHandler, IUserAccountRepository userAccountRepository, IPasswordService passwordService)
