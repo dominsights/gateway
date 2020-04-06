@@ -25,7 +25,6 @@ namespace PaymentGateway.Authorization.Controllers
             if (userPayload == null)
             {
                 _logger.LogWarning($"Login failed for user {credentials.UserName}.");
-
                 return BadRequest("Invalid credentials.");
             }
 
