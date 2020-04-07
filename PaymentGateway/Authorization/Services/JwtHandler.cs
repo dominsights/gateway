@@ -12,10 +12,8 @@ namespace PaymentGateway.Authorization.Services
     public class JwtHandler : IDisposable, IJwtHandler
     {
         private readonly JwtSettings _settings;
-        private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         private SecurityKey _issuerSigningKey;
         private SigningCredentials _signingCredentials;
-        private JwtHeader _jwtHeader;
         public TokenValidationParameters Parameters { get; private set; }
 
         private RSA _publicRsa;
@@ -50,7 +48,6 @@ namespace PaymentGateway.Authorization.Services
 
         private void InitializeJwtParameters()
         {
-            _jwtHeader = new JwtHeader(_signingCredentials);
             Parameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -84,7 +81,7 @@ namespace PaymentGateway.Authorization.Services
             };
 
             var jwt = tokenHandler.CreateToken(tokenDescriptor);
-            var token = _jwtSecurityTokenHandler.WriteToken(jwt);
+            var token = tokenHandler.WriteToken(jwt);
 
             return new JWT
             {

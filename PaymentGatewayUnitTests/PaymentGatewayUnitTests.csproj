@@ -24,4 +24,16 @@
     <ProjectReference Include="..\PaymentGateway\PaymentGateway.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="invalid-public-key.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="private-key.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="public-key.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
