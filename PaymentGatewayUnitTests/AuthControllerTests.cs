@@ -17,7 +17,7 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldLoginSuccesfully()
         {
-            var authServiceMock = new Mock<IAuthService>();
+            var authServiceMock = new Mock<AuthService>();
             authServiceMock.Setup(a => a.LoginAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(new UserJwt()));
         
             var authController = new AuthController(authServiceMock.Object, new Mock<ILogger<AuthController>>().Object);
@@ -32,7 +32,7 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldNotLoginWhereThereIsNoUser()
         {
-            var authServiceMock = new Mock<IAuthService>();
+            var authServiceMock = new Mock<AuthService>();
 
             var authController = new AuthController(authServiceMock.Object, new Mock<ILogger<AuthController>>().Object);
 
@@ -46,7 +46,7 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldRegisterNewUser()
         {
-            var authServiceMock = new Mock<IAuthService>();
+            var authServiceMock = new Mock<AuthService>();
 
             var authController = new AuthController(authServiceMock.Object, new Mock<ILogger<AuthController>>().Object);
 
@@ -61,7 +61,7 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldReturnBadRequestWhenErrorWhileRegisteringNewUser()
         {
-            var authServiceMock = new Mock<IAuthService>();
+            var authServiceMock = new Mock<AuthService>();
             authServiceMock.Setup(a => a.SaveAsync(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception());
 
             var authController = new AuthController(authServiceMock.Object, new Mock<ILogger<AuthController>>().Object);

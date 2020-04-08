@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PaymentGateway.Authorization.Services
 {
-    public class JwtHandler : IDisposable, IJwtHandler
+    public class JwtHandler : IDisposable
     {
         private readonly JwtSettings _settings;
         private SecurityKey _issuerSigningKey;
@@ -24,6 +24,12 @@ namespace PaymentGateway.Authorization.Services
             _settings = settings.Value;
             InitializeRsa();
             InitializeJwtParameters();
+        }
+
+        // Necessary for mocking
+        protected JwtHandler()
+        {
+
         }
 
         private void InitializeRsa()
@@ -57,7 +63,7 @@ namespace PaymentGateway.Authorization.Services
             };
         }
 
-        public JWT Create(string userId)
+        public virtual JWT Create(string userId)
         {
             var nowUtc = DateTime.UtcNow;
             var expires = nowUtc.AddDays(2);

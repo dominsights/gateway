@@ -35,11 +35,11 @@ namespace PaymentGateway
         {
             var config = Configuration.GetSection("jwt");
             var rabbitMqConfig = Configuration.GetSection("rabbitMq");
-            services.AddTransient<IJwtHandler, JwtHandler>();
-            services.AddTransient<IUserAccountRepository, UserAccountRepository>();
-            services.AddTransient<IPaymentService, PaymentService>();
-            services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IMessagingService, RabbitMqService>();
+            services.AddTransient<JwtHandler>();
+            services.AddTransient<UserAccountRepository>();
+            services.AddTransient<PaymentService>();
+            services.AddTransient<AuthService>();
+            services.AddTransient<RabbitMqService>();
             services.Configure<JwtSettings>(config);
             services.Configure<RabbitMqConfig>(rabbitMqConfig);
             services.AddControllers();

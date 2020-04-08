@@ -16,9 +16,9 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldSaveNewUser()
         {
-            var jwtHandlerMock = new Mock<IJwtHandler>();
-            var userAccountRepository = new Mock<IUserAccountRepository>();
-            var passwordServiceMock = new Mock<IPasswordService>();
+            var jwtHandlerMock = new Mock<JwtHandler>();
+            var userAccountRepository = new Mock<UserAccountRepository>();
+            var passwordServiceMock = new Mock<PasswordService>();
             passwordServiceMock.Setup(p => p.GenerateHashedPassword(It.IsAny<string>())).Returns(new Password());
             
             var authService = new AuthService(jwtHandlerMock.Object, userAccountRepository.Object, passwordServiceMock.Object);
@@ -31,9 +31,9 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldLoginSuccesfully()
         {
-            var jwtHandlerMock = new Mock<IJwtHandler>();
-            var userAccountRepository = new Mock<IUserAccountRepository>();
-            var passwordServiceMock = new Mock<IPasswordService>();
+            var jwtHandlerMock = new Mock<JwtHandler>();
+            var userAccountRepository = new Mock<UserAccountRepository>();
+            var passwordServiceMock = new Mock<PasswordService>();
 
             jwtHandlerMock.Setup(j => j.Create(It.IsAny<string>())).Returns(new JWT());
             userAccountRepository.Setup(u => u.GetByUsernameAsync(It.IsAny<string>())).Returns(Task.FromResult(new UserAccount() { Id = new Guid() }));
@@ -50,9 +50,9 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldNotLoginWhenInvalidPassword()
         {
-            var jwtHandlerMock = new Mock<IJwtHandler>();
-            var userAccountRepository = new Mock<IUserAccountRepository>();
-            var passwordServiceMock = new Mock<IPasswordService>();
+            var jwtHandlerMock = new Mock<JwtHandler>();
+            var userAccountRepository = new Mock<UserAccountRepository>();
+            var passwordServiceMock = new Mock<PasswordService>();
 
             userAccountRepository.Setup(u => u.GetByUsernameAsync(It.IsAny<string>())).Returns(Task.FromResult(new UserAccount() { Id = new Guid() }));
             passwordServiceMock.Setup(p => p.IsPasswordValid(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);

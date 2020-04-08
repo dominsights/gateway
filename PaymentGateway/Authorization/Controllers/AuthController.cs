@@ -13,7 +13,7 @@ namespace PaymentGateway.Authorization.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthService _authService;
+        private AuthService _authService;
         private ILogger<AuthController> _logger;
 
         [AllowAnonymous]
@@ -51,7 +51,7 @@ namespace PaymentGateway.Authorization.Controllers
         }
 
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthController(AuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
             _logger = logger;

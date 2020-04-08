@@ -6,14 +6,14 @@ using PaymentGateway.Authorization.Data;
 
 namespace PaymentGateway.Authorization.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
-        private IJwtHandler _jwtHandler;
+        private JwtHandler _jwtHandler;
 
-        private readonly IUserAccountRepository _userAccountRepository;
-        private readonly IPasswordService _passwordService;
+        private readonly UserAccountRepository _userAccountRepository;
+        private readonly PasswordService _passwordService;
 
-        public async Task<UserAccount> SaveAsync(string username, string password)
+        public virtual async Task<UserAccount> SaveAsync(string username, string password)
         {
             var hashedPassword = _passwordService.GenerateHashedPassword(password);
 
@@ -29,7 +29,7 @@ namespace PaymentGateway.Authorization.Services
             return userAccount;
         }
 
-        public async Task<UserJwt> LoginAsync(string userName, string password)
+        public virtual async Task<UserJwt> LoginAsync(string userName, string password)
         {
             var user = await _userAccountRepository.GetByUsernameAsync(userName);
 
@@ -44,11 +44,14 @@ namespace PaymentGateway.Authorization.Services
             return payload;
         }
 
-        public AuthService(IJwtHandler jwtHandler, IUserAccountRepository userAccountRepository, IPasswordService passwordService)
+        public AuthService(JwtHandler jwtHandler, UserAccountRepository userAccountRepository, PasswordService passwordService)
         {
             _jwtHandler = jwtHandler;
             _userAccountRepository = userAccountRepository;
             _passwordService = passwordService;
         }
+
+        // Necessary for mocking
+        protected AuthService() { }
     }
 }

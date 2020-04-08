@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Payments.Services
 {
-    public class RabbitMqService : IMessagingService
+    public class RabbitMqService
     {
         private ILogger _logger;
         private ConcurrentDictionary<ulong, string> _outstandingConfirms;
@@ -24,7 +24,13 @@ namespace PaymentGateway.Payments.Services
             _rabbitMQConfig = rabbitMQConfig.Value;
         }
 
-        public Task SendPaymentAsync(string paymentSerialized)
+        // Necessary for mocking
+        protected RabbitMqService()
+        {
+
+        }
+
+        public virtual Task SendPaymentAsync(string paymentSerialized)
         {
             Task task = new Task(() =>
             {

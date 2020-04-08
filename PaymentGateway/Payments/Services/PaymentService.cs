@@ -7,18 +7,23 @@ using System.Threading.Tasks;
 
 namespace PaymentGateway.Payments.Services
 {
-    public class PaymentService : IPaymentService
+    public class PaymentService
     {
-        private IMessagingService _messagingService;
+        private RabbitMqService _messagingService;
         private ILogger<PaymentService> _logger;
 
-        public PaymentService(IMessagingService messagingService, ILogger<PaymentService> logger)
+        public PaymentService(RabbitMqService messagingService, ILogger<PaymentService> logger)
         {
             _messagingService = messagingService;
             _logger = logger;
         }
 
-        public async Task<Guid> ProcessPaymentAsync(PaymentDto dto)
+        protected PaymentService()
+        {
+
+        }
+
+        public virtual async Task<Guid> ProcessPaymentAsync(PaymentDto dto)
         {
             dto.Id = Guid.NewGuid();
             string paymentSerialized = JsonSerializer.Serialize(dto);

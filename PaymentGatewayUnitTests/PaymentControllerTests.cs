@@ -22,7 +22,7 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldReturnAcceptedWhenPaymentIsSuccess()
         {
-            var paymentServiceMock = new Mock<IPaymentService>();
+            var paymentServiceMock = new Mock<PaymentService>();
 
             var claims = new List<Claim>()
             {

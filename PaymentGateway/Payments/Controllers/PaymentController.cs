@@ -17,11 +17,11 @@ namespace PaymentGateway.Payments.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private IPaymentService _paymentAppService;
+        private PaymentService _paymentAppService;
         private ILogger<PaymentController> _logger;
         private IMapper _mapper;
 
-        public PaymentController(IPaymentService paymentAppService, ILogger<PaymentController> logger, IMapper mapper)
+        public PaymentController(PaymentService paymentAppService, ILogger<PaymentController> logger, IMapper mapper)
         {
             _paymentAppService = paymentAppService;
             _logger = logger;
