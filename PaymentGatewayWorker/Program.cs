@@ -22,7 +22,7 @@ namespace PaymentGatewayWorker
                 {
                     var rabbitMqConfig = hostContext.Configuration.GetSection("rabbitMq");
                     services.Configure<RabbitMqConfig>(rabbitMqConfig);
-                    services.AddTransient<IRabbitMqConsumer, RabbitMqService>();
+                    services.AddTransient<RabbitMqConsumer>();
                     services.AddHostedService<Worker>();
                 });
     }

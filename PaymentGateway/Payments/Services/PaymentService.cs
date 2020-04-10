@@ -10,10 +10,10 @@ namespace PaymentGateway.Payments.Services
 {
     public class PaymentService
     {
-        private IRabbitMqPublisher _messagingService;
+        private RabbitMqPublisher _messagingService;
         private ILogger<PaymentService> _logger;
 
-        public PaymentService(IRabbitMqPublisher messagingService, ILogger<PaymentService> logger)
+        public PaymentService(RabbitMqPublisher messagingService, ILogger<PaymentService> logger)
         {
             _messagingService = messagingService;
             _logger = logger;

@@ -13,9 +13,9 @@ namespace PaymentGatewayWorker
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IRabbitMqConsumer _rabbitMqConsumer;
+        private readonly RabbitMqConsumer _rabbitMqConsumer;
 
-        public Worker(ILogger<Worker> logger, IRabbitMqConsumer rabbitMqConsumer)
+        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer)
         {
             _logger = logger;
             _rabbitMqConsumer = rabbitMqConsumer;
@@ -23,7 +23,7 @@ namespace PaymentGatewayWorker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _rabbitMqConsumer.StartListeningForPaymentRequests();
+            _rabbitMqConsumer.StartListeningForPaymentRequests();
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);

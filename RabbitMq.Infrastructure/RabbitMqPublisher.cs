@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RabbitMq.Infrastructure
 {
-    public class RabbitMqService : IRabbitMqPublisher, IRabbitMqConsumer, IDisposable
+    public class RabbitMqPublisher : IDisposable
     {
         private const string QUEUE_NAME = "payment_queue";
         private ILogger _logger;
@@ -19,6 +19,7 @@ namespace RabbitMq.Infrastructure
         private RabbitMqConfig _rabbitMQConfig;
         private IConnection _connection;
         private IModel _channel;
+
 
         public virtual Task SendPaymentAsync(string paymentSerialized)
         {
@@ -31,68 +32,25 @@ namespace RabbitMq.Infrastructure
                     Password = _rabbitMQConfig.Password
                 };
 
-                using (var connection = factory.CreateConnection())
-                {
-                    using (var channel = connection.CreateModel())
-                    {
-                        channel.ConfirmSelect();
-                        channel.BasicAcks += Channel_BasicAcks;
-                        channel.BasicNacks += Channel_BasicNacks;
-
-                        channel.QueueDeclare(queue: QUEUE_NAME, durable: true, exclusive: false,
-                                              autoDelete: false, arguments: null);
-
-                        var body = Encoding.UTF8.GetBytes(paymentSerialized);
-
-                        var properties = channel.CreateBasicProperties();
-                        properties.Persistent = true;
-
-                        _outstandingConfirms.TryAdd(channel.NextPublishSeqNo, paymentSerialized);
-                        channel.BasicPublish(exchange: string.Empty, routingKey: QUEUE_NAME,
-                                              basicProperties: properties, body: body);
-
-                        channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
-                    }
-                }
-            });
-
-            task.Start();
-
-            return task;
-        }
-
-        public Task StartListeningForPaymentRequests()
-        {
-            var task = new Task(() =>
-            {
-
-                var factory = new ConnectionFactory()
-                {
-                    HostName = _rabbitMQConfig.HostName,
-                    UserName = _rabbitMQConfig.UserName,
-                    Password = _rabbitMQConfig.Password
-                };
-
                 _connection = factory.CreateConnection();
                 _channel = _connection.CreateModel();
+                _channel.ConfirmSelect();
+                _channel.BasicAcks += Channel_BasicAcks;
+                _channel.BasicNacks += Channel_BasicNacks;
+
                 _channel.QueueDeclare(queue: QUEUE_NAME, durable: true, exclusive: false,
-                                        autoDelete: false, arguments: null);
+                                                  autoDelete: false, arguments: null);
 
-                _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+                var body = Encoding.UTF8.GetBytes(paymentSerialized);
 
-                var consumer = new EventingBasicConsumer(_channel);
-                consumer.Received += (sender, e) =>
-                {
-                    var body = e.Body;
-                    var message = Encoding.UTF8.GetString(body);
+                var properties = _channel.CreateBasicProperties();
+                properties.Persistent = true;
 
-                    // Do Work
-                    Console.WriteLine(message);
+                _outstandingConfirms.TryAdd(_channel.NextPublishSeqNo, paymentSerialized);
+                _channel.BasicPublish(exchange: string.Empty, routingKey: QUEUE_NAME,
+                                              basicProperties: properties, body: body);
 
-                    _channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: true);
-                };
-
-                _channel.BasicConsume(queue: QUEUE_NAME, autoAck: false, consumer: consumer);
+                _channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
             });
 
             task.Start();
@@ -151,7 +109,7 @@ namespace RabbitMq.Infrastructure
             Dispose(true);
         }
 
-        public RabbitMqService(ILogger<RabbitMqService> logger, IOptions<RabbitMqConfig> rabbitMQConfig)
+        public RabbitMqPublisher(ILogger<RabbitMqPublisher> logger, IOptions<RabbitMqConfig> rabbitMQConfig) : this()
         {
             _logger = logger;
             _outstandingConfirms = new ConcurrentDictionary<ulong, string>();
@@ -159,7 +117,7 @@ namespace RabbitMq.Infrastructure
         }
 
         // Necessary for mocking
-        protected RabbitMqService()
+        protected RabbitMqPublisher()
         {
 
         }

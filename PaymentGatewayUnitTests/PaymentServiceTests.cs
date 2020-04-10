@@ -17,7 +17,7 @@ namespace PaymentGatewayUnitTests
         [Fact]
         public void ShouldCallMessagingService()
         {
-            var messagingMock = new Mock<RabbitMqService>();
+            var messagingMock = new Mock<RabbitMqPublisher>();
             var paymentService = new PaymentService(messagingMock.Object, new Mock<ILogger<PaymentService>>().Object);
 
             var dto = _fixture.Mapper.Map<PaymentDto>(_fixture.PaymentInput);

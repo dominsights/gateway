@@ -41,7 +41,7 @@ namespace PaymentGateway
             services.AddTransient<PaymentService>();
             services.AddTransient<PasswordService>();
             services.AddTransient<AuthService>();
-            services.AddTransient<IRabbitMqPublisher, RabbitMqService>();
+            services.AddTransient<RabbitMqPublisher>();
             services.Configure<JwtSettings>(config);
             services.Configure<RabbitMqConfig>(rabbitMqConfig);
             services.AddControllers();
