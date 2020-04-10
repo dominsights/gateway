@@ -1,5 +1,4 @@
 using PaymentGatewayWorker;
-using RabbitMq.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

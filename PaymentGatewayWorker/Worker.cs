@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using RabbitMq.Infrastructure;
-
 namespace PaymentGatewayWorker
 {
     public class Worker : BackgroundService

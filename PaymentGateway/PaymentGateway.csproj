@@ -23,9 +23,5 @@
     <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\RabbitMq.Infrastructure\RabbitMq.Infrastructure.csproj" />
-  </ItemGroup>
-
 
 </Project>

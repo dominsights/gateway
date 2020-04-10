@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PaymentGatewayWorker\PaymentGatewayWorker.csproj" />
-    <ProjectReference Include="..\RabbitMq.Infrastructure\RabbitMq.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

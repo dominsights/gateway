@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - PaymentGateway", "1 - P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - PaymentGatewayWorker", "2 - PaymentGatewayWorker", "{CB566D6D-3748-4281-AFC5-42F0A40B0D10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMq.Infrastructure", "RabbitMq.Infrastructure\RabbitMq.Infrastructure.csproj", "{71CF7D1A-6305-433B-82B3-56EE347D9D74}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +37,6 @@ Global
 		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

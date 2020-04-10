@@ -18,7 +18,6 @@ using PaymentGateway.Authorization.Data;
 using PaymentGateway.Authorization.Services;
 using PaymentGateway.Payments.Services;
 using PaymentGateway.Mapper;
-using RabbitMq.Infrastructure;
 
 namespace PaymentGateway
 {
