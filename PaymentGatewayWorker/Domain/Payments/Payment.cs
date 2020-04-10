@@ -1,9 +1,12 @@
-﻿using System;
+﻿using PaymentGatewayWorker.Domain.Payments.Validations.Payments;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace PaymentGatewayWorker
+namespace PaymentGatewayWorker.Domain
 {
-    public class Payment
+    class Payment
     {
         public Guid Id { get; set; }
         [Required]
@@ -24,5 +27,13 @@ namespace PaymentGatewayWorker
         [MinLength(3)]
         [MaxLength(3)]
         public string CVV { get; set; }
+
+        public DomainValidationCore.Validation.ValidationResult ValidationResult { get; internal set; }
+
+        internal bool IsValid()
+        {
+            ValidationResult = new PaymentIsValidValidation().Validate(this);
+            return ValidationResult.IsValid;
+        }
     }
 }

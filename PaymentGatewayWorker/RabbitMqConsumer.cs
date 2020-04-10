@@ -5,16 +5,19 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker
 {
-    public class RabbitMqConsumer
+    class RabbitMqConsumer
     {
         private IConnection _connection;
         private IModel _channel;
         private const string QUEUE_NAME = "payment_queue";
         private ILogger<RabbitMqConsumer> _logger;
         private RabbitMqConfig _rabbitMQConfig;
+        private ProcessPaymentAppService _processPaymentAppService;
 
         public void StartListeningForPaymentRequests()
         {
@@ -33,18 +36,23 @@ namespace PaymentGatewayWorker
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (sender, e) =>
+            consumer.Received += async (sender, e) =>
             {
                 var body = e.Body;
                 var message = Encoding.UTF8.GetString(body);
 
-                // Do Work
-                Console.WriteLine(message);
+                await DoWorkAsync(message);
 
                 _channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: true);
             };
 
             _channel.BasicConsume(queue: QUEUE_NAME, autoAck: false, consumer: consumer);
+        }
+
+        private async Task DoWorkAsync(string message)
+        {
+            var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
+            await _processPaymentAppService.ProcessPaymentAsync(paymentDto);
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -68,14 +76,15 @@ namespace PaymentGatewayWorker
             Dispose(true);
         }
 
-        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig) : this()
+        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig, ProcessPaymentAppService processPaymentAppService) : this()
         {
             _logger = logger;
             _rabbitMQConfig = rabbitMQConfig.Value;
+            _processPaymentAppService = processPaymentAppService;
         }
 
         // Necessary for mocking
-        protected RabbitMqConsumer()
+        protected RabbitMqConsumer() : base()
         {
 
         }

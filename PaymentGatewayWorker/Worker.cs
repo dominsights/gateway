@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PaymentGatewayWorker
 {
-    public class Worker : BackgroundService
+    class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
         private readonly RabbitMqConsumer _rabbitMqConsumer;
