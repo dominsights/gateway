@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using RabbitMq.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace PaymentGateway.Payments.Services
 {
     public class PaymentService
     {
-        private RabbitMqService _messagingService;
+        private IRabbitMqPublisher _messagingService;
         private ILogger<PaymentService> _logger;
 
-        public PaymentService(RabbitMqService messagingService, ILogger<PaymentService> logger)
+        public PaymentService(IRabbitMqPublisher messagingService, ILogger<PaymentService> logger)
         {
             _messagingService = messagingService;
             _logger = logger;

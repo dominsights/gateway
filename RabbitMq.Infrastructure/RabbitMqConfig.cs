@@ -1,4 +1,4 @@
-﻿namespace PaymentGateway.Payments.Services
+﻿namespace RabbitMq.Infrastructure
 {
     public class RabbitMqConfig
     {

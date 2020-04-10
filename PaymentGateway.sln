@@ -7,7 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGateway", "PaymentGa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGatewayUnitTests", "PaymentGatewayUnitTests\PaymentGatewayUnitTests.csproj", "{E5AC5687-09E0-4241-B86C-D489A5CA2E64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentGatewayWorker", "PaymentGatewayWorker\PaymentGatewayWorker.csproj", "{423C0B7B-6937-4126-AAF8-55B3EABC098A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGatewayWorker", "PaymentGatewayWorker\PaymentGatewayWorker.csproj", "{423C0B7B-6937-4126-AAF8-55B3EABC098A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGatewayWorkerUnitTests", "PaymentGatewayWorkerUnitTests\PaymentGatewayWorkerUnitTests.csproj", "{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - PaymentGateway", "1 - PaymentGateway", "{72E2E31C-7EFC-4162-8D88-B8FE7676436E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - PaymentGatewayWorker", "2 - PaymentGatewayWorker", "{CB566D6D-3748-4281-AFC5-42F0A40B0D10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMq.Infrastructure", "RabbitMq.Infrastructure\RabbitMq.Infrastructure.csproj", "{71CF7D1A-6305-433B-82B3-56EE347D9D74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +35,23 @@ Global
 		{423C0B7B-6937-4126-AAF8-55B3EABC098A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{423C0B7B-6937-4126-AAF8-55B3EABC098A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{423C0B7B-6937-4126-AAF8-55B3EABC098A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71CF7D1A-6305-433B-82B3-56EE347D9D74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3A3E6DE5-CE62-4D5C-8DE6-21BE2C25B97B} = {72E2E31C-7EFC-4162-8D88-B8FE7676436E}
+		{E5AC5687-09E0-4241-B86C-D489A5CA2E64} = {72E2E31C-7EFC-4162-8D88-B8FE7676436E}
+		{423C0B7B-6937-4126-AAF8-55B3EABC098A} = {CB566D6D-3748-4281-AFC5-42F0A40B0D10}
+		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74} = {CB566D6D-3748-4281-AFC5-42F0A40B0D10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31788721-2DF8-463D-84E1-DFD1AC56C017}

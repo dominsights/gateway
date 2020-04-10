@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using PaymentGateway.Payments.Services;
+using RabbitMq.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Text;

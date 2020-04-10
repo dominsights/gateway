@@ -18,6 +18,7 @@ using PaymentGateway.Authorization.Data;
 using PaymentGateway.Authorization.Services;
 using PaymentGateway.Payments.Services;
 using PaymentGateway.Mapper;
+using RabbitMq.Infrastructure;
 
 namespace PaymentGateway
 {
@@ -38,8 +39,9 @@ namespace PaymentGateway
             services.AddTransient<JwtHandler>();
             services.AddTransient<UserAccountRepository>();
             services.AddTransient<PaymentService>();
+            services.AddTransient<PasswordService>();
             services.AddTransient<AuthService>();
-            services.AddTransient<RabbitMqService>();
+            services.AddTransient<IRabbitMqPublisher, RabbitMqService>();
             services.Configure<JwtSettings>(config);
             services.Configure<RabbitMqConfig>(rabbitMqConfig);
             services.AddControllers();
