@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using DomainValidationCore.Interfaces.Specification;
 using PaymentGatewayWorker.Domain.Payments.Data;
+using PaymentGatewayWorker.Domain.Payments.Data.Entities;
+using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 
 namespace PaymentGatewayWorker.Domain.Specifications.Payments
 {
@@ -17,8 +19,17 @@ namespace PaymentGatewayWorker.Domain.Specifications.Payments
 
         public bool IsSatisfiedBy(Payment entity)
         {
-            // query to check if there is a payment with the same payment details
-            throw new NotImplementedException();
+            // I'm assuming these field are enough to check if the payment is duplicated.
+            var paymentFilter = new PaymentFilter()
+            {
+                Amount = entity.Amount,
+                CardNumber = entity.CardNumber,
+                CurrencyCode = entity.CurrencyCode,
+                CVV = entity.CVV
+            };
+
+            // TODO: Extend ISpecification to support async
+            return _paymentRepository.GetByFilterAsync(paymentFilter).Result == null;
         }
     }
 }

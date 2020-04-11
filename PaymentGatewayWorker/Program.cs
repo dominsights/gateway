@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using PaymentGatewayWorker.Mapper;
 using PaymentGatewayWorker.Domain.Services;
 using PaymentGatewayWorker.Domain.Payments.Data;
+using Microsoft.Extensions.Options;
+using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 
 namespace PaymentGatewayWorker
 {
@@ -27,14 +29,13 @@ namespace PaymentGatewayWorker
                 {
                     var rabbitMqConfig = hostContext.Configuration.GetSection("rabbitMq");
 
-                    //services.AddDbContext<PaymentEventStoreDbContext>(options =>
-                    //{
-                    //    options.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
-                    //});
-
                     var optionsBuilder = new DbContextOptionsBuilder<PaymentEventStoreDbContext>();
                     optionsBuilder.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
                     services.AddTransient<PaymentEventStoreDbContext>(d => new PaymentEventStoreDbContext(optionsBuilder.Options));
+
+                    services.Configure<MongoDbSettings>(hostContext.Configuration.GetSection(nameof(MongoDbSettings)));
+
+                    services.AddSingleton<MongoDbSettings>(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
                     services.Configure<RabbitMqConfig>(rabbitMqConfig);
                     services.AddTransient<RabbitMqConsumer>();
@@ -47,10 +48,7 @@ namespace PaymentGatewayWorker
                     services.AddHostedService<Worker>();
 
                     var mapperConfig = MapperConfigurationFactory.MapperConfiguration;
-
                     services.AddSingleton(mapperConfig.CreateMapper());
-
-
                 });
     }
 }

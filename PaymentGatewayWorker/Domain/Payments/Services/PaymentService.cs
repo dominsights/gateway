@@ -1,4 +1,5 @@
 ﻿using PaymentGatewayWorker.Domain.Payments.Data;
+using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 using PaymentGatewayWorker.Domain.Validations.Payments;
 using System;
 using System.Collections.Generic;
