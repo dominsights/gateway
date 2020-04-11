@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CQRS;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PaymentGatewayWorker.CQRS;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -18,9 +20,12 @@ namespace PaymentGatewayWorker
         private ILogger<RabbitMqConsumer> _logger;
         private RabbitMqConfig _rabbitMQConfig;
         private ProcessPaymentAppService _processPaymentAppService;
+        private IBus _bus;
 
         public void StartListeningForPaymentRequests()
         {
+            BusConfig.Initialize(_bus);
+
             var factory = new ConnectionFactory()
             {
                 HostName = _rabbitMQConfig.HostName,
@@ -51,8 +56,11 @@ namespace PaymentGatewayWorker
 
         private async Task DoWorkAsync(string message)
         {
-            var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
-            await _processPaymentAppService.ProcessPaymentAsync(paymentDto);
+            await Task.Run(() =>
+            {
+                var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
+                _processPaymentAppService.ProcessPayments(paymentDto);
+            });
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -76,11 +84,12 @@ namespace PaymentGatewayWorker
             Dispose(true);
         }
 
-        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig, ProcessPaymentAppService processPaymentAppService) : this()
+        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig, ProcessPaymentAppService processPaymentAppService, IBus bus) : this()
         {
             _logger = logger;
             _rabbitMQConfig = rabbitMQConfig.Value;
             _processPaymentAppService = processPaymentAppService;
+            _bus = bus;
         }
 
         // Necessary for mocking

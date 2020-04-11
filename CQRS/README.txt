@@ -1,0 +1,1 @@
+﻿Helper project for CQRS and Event Sourcing. It is responsible for declaring the types used in CQRS like Sagas, Events and a message bus for event and command handling.

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using DomainValidationCore.Interfaces.Specification;
-using PaymentGatewayWorker.Domain.Interfaces;
+using PaymentGatewayWorker.Domain.Payments.Data;
 
 namespace PaymentGatewayWorker.Domain.Specifications.Payments
 {
     class PaymentCannotHaveDuplicatedIdSpecification : ISpecification<Payment>
     {
-        private IPaymentRepository paymentRepository;
+        private PaymentRepository paymentRepository;
 
-        public PaymentCannotHaveDuplicatedIdSpecification(IPaymentRepository paymentRepository)
+        public PaymentCannotHaveDuplicatedIdSpecification(PaymentRepository paymentRepository)
         {
             this.paymentRepository = paymentRepository;
         }

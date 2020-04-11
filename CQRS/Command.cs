@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentGatewayWorker.Domain.Interfaces
+namespace CQRS
 {
-    interface IPaymentRepository
+    public class Command : Message
     {
+
     }
 }

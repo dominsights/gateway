@@ -1,4 +1,4 @@
-﻿using PaymentGatewayWorker.Domain.Interfaces;
+﻿using PaymentGatewayWorker.Domain.Payments.Data;
 using PaymentGatewayWorker.Domain.Validations.Payments;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace PaymentGatewayWorker.Domain.Services
 {
     class PaymentService
     {
-        private readonly IPaymentRepository _paymentRepository;
+        private readonly PaymentRepository _paymentRepository;
 
         public Payment ValidateToCreate(Payment payment)
         {
@@ -20,6 +20,11 @@ namespace PaymentGatewayWorker.Domain.Services
             payment.ValidationResult = new PaymentIsIdempotentValidation(_paymentRepository).Validate(payment);
 
             return payment;
+        }
+
+        public PaymentService(PaymentRepository paymentRepository)
+        {
+            _paymentRepository = paymentRepository;
         }
     }
 }

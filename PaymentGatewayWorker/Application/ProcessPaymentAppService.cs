@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CQRS;
 using Microsoft.Extensions.Logging;
+using PaymentGatewayWorker.CQRS;
 using PaymentGatewayWorker.Domain;
 using PaymentGatewayWorker.Domain.Services;
 using System;
@@ -14,25 +16,41 @@ namespace PaymentGatewayWorker
         private ILogger<ProcessPaymentAppService> _logger;
         private IMapper _mapper;
         private PaymentService _paymentService;
+        private IBus _bus;
 
-        internal Task ProcessPaymentAsync(PaymentDto paymentDto)
+        internal void ProcessPayments(PaymentDto paymentDto)
         {
             var payment = _mapper.Map<Payment>(paymentDto);
             var paymentResult = _paymentService.ValidateToCreate(payment);
 
-            if(paymentResult.ValidationResult.IsValid)
+            if (paymentResult.ValidationResult.IsValid)
             {
-                // create command
-            }
+                var command = new AddNewPaymentCommand(
+                    payment.UserId,
+                    payment.Id,
+                    payment.CardNumber,
+                    payment.ExpiryMonth,
+                    payment.ExpiryYear,
+                    payment.Amount,
+                    payment.CurrencyCode,
+                    payment.CVV);
 
-            throw new NotImplementedException();
+                _bus.Send(command);
+            }
+            else
+            {
+                string message = "Payment details are invalid.";
+                _logger.LogError(message, paymentResult);
+                throw new InvalidOperationException(message);
+            }
         }
 
-        public ProcessPaymentAppService(ILogger<ProcessPaymentAppService> logger, IMapper mapper, PaymentService paymentService)
+        public ProcessPaymentAppService(ILogger<ProcessPaymentAppService> logger, IMapper mapper, PaymentService paymentService, IBus bus)
         {
             _logger = logger;
             _mapper = mapper;
             _paymentService = paymentService;
+            _bus = bus;
         }
     }
 }

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using DomainValidationCore.Interfaces.Specification;
-using PaymentGatewayWorker.Domain.Interfaces;
+using PaymentGatewayWorker.Domain.Payments.Data;
 
 namespace PaymentGatewayWorker.Domain.Specifications.Payments
 {
     class PaymentIsNotDuplicatedSpecification : ISpecification<Payment>
     {
-        private IPaymentRepository paymentRepository;
+        private PaymentRepository _paymentRepository;
 
-        public PaymentIsNotDuplicatedSpecification(IPaymentRepository paymentRepository)
+        public PaymentIsNotDuplicatedSpecification(PaymentRepository paymentRepository)
         {
-            this.paymentRepository = paymentRepository;
+            _paymentRepository = paymentRepository;
         }
 
         public bool IsSatisfiedBy(Payment entity)

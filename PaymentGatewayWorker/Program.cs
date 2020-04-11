@@ -2,9 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CQRS;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PaymentGatewayWorker.EventSourcing;
+using Microsoft.EntityFrameworkCore;
+using PaymentGatewayWorker.Mapper;
+using PaymentGatewayWorker.Domain.Services;
+using PaymentGatewayWorker.Domain.Payments.Data;
 
 namespace PaymentGatewayWorker
 {
@@ -20,9 +26,31 @@ namespace PaymentGatewayWorker
                 .ConfigureServices((hostContext, services) =>
                 {
                     var rabbitMqConfig = hostContext.Configuration.GetSection("rabbitMq");
+
+                    //services.AddDbContext<PaymentEventStoreDbContext>(options =>
+                    //{
+                    //    options.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
+                    //});
+
+                    var optionsBuilder = new DbContextOptionsBuilder<PaymentEventStoreDbContext>();
+                    optionsBuilder.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
+                    services.AddTransient<PaymentEventStoreDbContext>(d => new PaymentEventStoreDbContext(optionsBuilder.Options));
+
                     services.Configure<RabbitMqConfig>(rabbitMqConfig);
                     services.AddTransient<RabbitMqConsumer>();
+                    services.AddTransient<IBus, InMemoryBus>();
+                    services.AddTransient<IEventStore, EventStore>();
+                    services.AddTransient<EventRepository>();
+                    services.AddTransient<ProcessPaymentAppService>();
+                    services.AddTransient<PaymentService>();
+                    services.AddTransient<PaymentRepository>();
                     services.AddHostedService<Worker>();
+
+                    var mapperConfig = MapperConfigurationFactory.MapperConfiguration;
+
+                    services.AddSingleton(mapperConfig.CreateMapper());
+
+
                 });
     }
 }
