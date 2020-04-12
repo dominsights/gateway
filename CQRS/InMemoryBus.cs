@@ -10,6 +10,7 @@ namespace CQRS
     {
         public IEventStore EventStore { get; private set; }
 
+        private IRepository _repository;
         private static readonly IDictionary<Type, Type> RegisteredSagas = new Dictionary<Type, Type>();
         private static readonly IList<Type> RegisteredHandlers = new List<Type>();
 
@@ -96,14 +97,15 @@ namespace CQRS
 
             foreach (var s in sagasToLaunch)
             {
-                dynamic sagaInstance = Activator.CreateInstance(s, this, EventStore);
-                sagaInstance.Handle(message);
+                dynamic sagaInstance = Activator.CreateInstance(s, this, EventStore, _repository);
+                sagaInstance.HandleAsync(message);
             }
         }
 
-        public InMemoryBus(IEventStore eventStore)
+        public InMemoryBus(IEventStore eventStore, IRepository repository)
         {
             EventStore = eventStore;
+            _repository = repository;
         }
     }
 }

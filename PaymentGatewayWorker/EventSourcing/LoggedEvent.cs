@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace PaymentGatewayWorker.EventSourcing
 {
+    [Table("LoggedEvent")]
     public class LoggedEvent
     {
         public Guid Id { get; set; }

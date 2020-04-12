@@ -10,7 +10,6 @@ namespace PaymentGatewayWorker.Domain.Payments.Interfaces
 {
     interface IPaymentRepository
     {
-        Task AddAsync(Payment payment);
         Task<Payment> GetByIdAsync(Guid id);
         Task<Payment> GetByFilterAsync(PaymentFilter paymentFilter);
     }

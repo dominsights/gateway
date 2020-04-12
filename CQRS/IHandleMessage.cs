@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CQRS
 {
-    interface IHandleMessage<in T>
+    public interface IHandleMessage<in T>
     {
         void Handle(T message);
     }

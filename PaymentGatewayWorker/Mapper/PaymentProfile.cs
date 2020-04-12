@@ -16,6 +16,14 @@ namespace PaymentGatewayWorker.Mapper
             CreateMap<PaymentDto, Payment>();
             CreateMap<Payment, Entities.Payment>();
             CreateMap<Payment, Entities.PaymentReadModel>();
+            CreateMap<Entities.Payment, Payment>();
+
+
+    //        CreateMap<PaymentInput, PaymentDto>()
+    //.ForMember(p => p.UserId, opt => opt.Ignore())
+    //.ForMember(p => p.Id, opt => opt.Ignore());
+
+
         }
     }
 }

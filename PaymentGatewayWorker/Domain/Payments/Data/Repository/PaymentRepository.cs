@@ -24,7 +24,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
 
         // IPaymentRepository
 
-        public async Task AddAsync(Payment payment)
+        private async Task AddAsync(Payment payment)
         {
             try
             {
@@ -74,9 +74,20 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
             throw new NotImplementedException();
         }
 
-        public CommandResponse CreateFromRequest<T>(T item) where T : class
+        public async Task<CommandResponse> CreateFromRequestAsync<T>(T item) where T : class
         {
-            throw new NotImplementedException();
+            var request = item as Payment;
+
+            try
+            {
+                await AddAsync(request);
+                var response = new CommandResponse(true, request.Id);
+                return response;
+            } catch(Exception e)
+            {
+                _logger.LogError(e, $"Error while trying to create from request payment id {request.Id}");
+                return new CommandResponse(false, request.Id);
+            }
         }
 
         public CommandResponse Update<T>(T item) where T : class

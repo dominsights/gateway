@@ -1,4 +1,5 @@
 ﻿using CQRS;
+using PaymentGatewayWorker.CQRS.CommandStack.Handlers;
 using PaymentGatewayWorker.CQRS.CommandStack.Sagas;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace PaymentGatewayWorker.CQRS
         public static void Initialize(IBus bus)
         {
             bus.RegisterSaga<AddPaymentSaga>();
+            bus.RegisterHandler<AddNewPaymentSuccessHandler>();
+            bus.RegisterHandler<AddNewPaymentErrorHandler>();
         }
     }
 }

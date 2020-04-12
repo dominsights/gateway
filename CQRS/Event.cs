@@ -9,6 +9,7 @@ namespace CQRS
         public DateTime TimeStamp { get; private set; }
 
         public Event()
+            :base()
         {
             TimeStamp = DateTime.UtcNow;
             Name = this.GetType().Name;

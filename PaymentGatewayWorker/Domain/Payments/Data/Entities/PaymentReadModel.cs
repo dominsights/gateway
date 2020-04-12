@@ -27,6 +27,8 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
         public string CurrencyCode { get; set; }
         [BsonRequired]
         public string CVV { get; set; }
+        [BsonRepresentation(BsonType.String)]
+        [BsonRequired]
         public PaymentStatus Status { get; internal set; }
     }
 }

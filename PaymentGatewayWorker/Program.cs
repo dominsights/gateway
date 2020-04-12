@@ -13,6 +13,8 @@ using PaymentGatewayWorker.Domain.Services;
 using PaymentGatewayWorker.Domain.Payments.Data;
 using Microsoft.Extensions.Options;
 using PaymentGatewayWorker.Domain.Payments.Data.Repository;
+using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson;
 
 namespace PaymentGatewayWorker
 {
@@ -45,6 +47,7 @@ namespace PaymentGatewayWorker
                     services.AddTransient<PaymentService>();
                     services.AddTransient<PaymentRepository>();
                     services.AddHostedService<Worker>();
+                    services.AddTransient<IRepository, PaymentRepository>();
 
                     var mapperConfig = MapperConfigurationFactory.MapperConfiguration;
                     services.AddSingleton(mapperConfig.CreateMapper());

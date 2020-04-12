@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PaymentGatewayWorker.Domain
 {
-    class Payment
+    public class Payment
     {
         public Guid Id { get; set; }
         [Required]
@@ -34,6 +34,26 @@ namespace PaymentGatewayWorker.Domain
         {
             ValidationResult = new PaymentIsValidValidation().Validate(this);
             return ValidationResult.IsValid;
+        }
+
+        public static class Factory
+        {
+            public static Payment NewPayment(Guid id, Guid userId, string cardNumber, int expiryMonth, int expiryYear, decimal amount, string currencyCode, string cvv)
+            {
+                var payment = new Payment()
+                {
+                    Id = id,
+                    UserId = userId,
+                    Amount = amount,
+                    CardNumber = cardNumber,
+                    CurrencyCode = currencyCode,
+                    CVV = cvv,
+                    ExpiryMonth = expiryMonth,
+                    ExpiryYear = expiryYear
+                };
+
+                return payment;
+            }
         }
     }
 }
