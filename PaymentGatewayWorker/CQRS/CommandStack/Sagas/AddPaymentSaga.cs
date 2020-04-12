@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 {
-    class AddPaymentSaga : Saga,
+    public class AddPaymentSaga : Saga,
         IStartWithMessage<AddNewPaymentCommand>
     {
         public void Handle(AddNewPaymentCommand message)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PaymentGatewayWorker.CQRS
 {
-    class AddNewPaymentCommand : Command
+    public class AddNewPaymentCommand : Command
     {
         public Guid UserId { get; set; }
         public string CardNumber { get; set; }
