@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 {
     public class AddPaymentSaga : Saga,
-        IStartWithMessage<AddNewPaymentCommand>
+        IStartWithMessage<AddNewPaymentCommand>,
+        IHandleMessage<AddNewPaymentSuccessEvent>
     {
         private IRepository _respository;
         private IBus _bus;
@@ -30,6 +31,12 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 
             var createdEvent = new AddNewPaymentSuccessEvent(request.Id, request);
             await _bus.RaiseEventAsync(createdEvent);
+        }
+
+        public void Handle(AddNewPaymentSuccessEvent message)
+        {
+            // Send payment to bank after it is created in the application
+            throw new NotImplementedException();
         }
 
         public AddPaymentSaga(IBus bus, IEventStore eventStore, IRepository repository)

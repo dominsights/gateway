@@ -80,7 +80,7 @@ namespace CQRS
 
             foreach (var s in sagasToNotify)
             {
-                dynamic sagaInstance = Activator.CreateInstance(s, this, EventStore);
+                dynamic sagaInstance = Activator.CreateInstance(s, this, EventStore, _repository);
                 sagaInstance.Handle(message);
             }
         }

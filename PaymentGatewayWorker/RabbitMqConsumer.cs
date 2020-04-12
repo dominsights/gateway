@@ -58,8 +58,15 @@ namespace PaymentGatewayWorker
         {
             await Task.Run(() =>
             {
-                var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
-                _processPaymentAppService.ProcessPayments(paymentDto);
+                try
+                {
+                    var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
+                    _processPaymentAppService.ProcessPayments(paymentDto);
+                }
+                catch(Exception e)
+                {
+                    _logger.LogError(e, "Error while processing message.", message);
+                }
             });
         }
 
