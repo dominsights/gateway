@@ -15,6 +15,7 @@ namespace PaymentGatewayWorker.Mapper
         {
             CreateMap<PaymentDto, Payment>();
             CreateMap<Payment, Entities.Payment>();
+            CreateMap<Payment, Entities.PaymentReadModel>();
         }
     }
 }

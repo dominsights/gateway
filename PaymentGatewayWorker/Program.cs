@@ -29,13 +29,12 @@ namespace PaymentGatewayWorker
                 {
                     var rabbitMqConfig = hostContext.Configuration.GetSection("rabbitMq");
 
-                    var optionsBuilder = new DbContextOptionsBuilder<PaymentEventStoreDbContext>();
-                    optionsBuilder.UseNpgsql(hostContext.Configuration.GetConnectionString("DefaultConnection"));
-                    services.AddTransient<PaymentEventStoreDbContext>(d => new PaymentEventStoreDbContext(optionsBuilder.Options));
+                    var optionsBuilder = new DbContextOptionsBuilder<PaymentsDbContext>();
+                    optionsBuilder.UseNpgsql(hostContext.Configuration.GetConnectionString("PostgresConnectionString"));
+                    services.AddTransient(d => new PaymentsDbContext(optionsBuilder.Options));
 
                     services.Configure<MongoDbSettings>(hostContext.Configuration.GetSection(nameof(MongoDbSettings)));
-
-                    services.AddSingleton<MongoDbSettings>(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
+                    services.AddSingleton(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
                     services.Configure<RabbitMqConfig>(rabbitMqConfig);
                     services.AddTransient<RabbitMqConsumer>();

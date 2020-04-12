@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PaymentGatewayWorker.Domain.Payments.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PaymentGatewayWorker.EventSourcing
 {
     class EventRepository
     {
-        private readonly PaymentEventStoreDbContext _dbContext;
+        private readonly PaymentsDbContext _dbContext;
 
         public async Task SaveAsync(LoggedEvent @event)
         {
@@ -24,7 +25,7 @@ namespace PaymentGatewayWorker.EventSourcing
             return await events.ToListAsync();
         }
 
-        public EventRepository(PaymentEventStoreDbContext dbContext)
+        public EventRepository(PaymentsDbContext dbContext)
         {
             _dbContext = dbContext;
         }
