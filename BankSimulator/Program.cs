@@ -1,33 +1,26 @@
-﻿using System;
-using WireMock.RequestBuilders;
-using WireMock.ResponseBuilders;
-using WireMock.Server;
-using WireMock.Settings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BankSimulator
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            var stub = FluentMockServer.Start(new FluentMockServerSettings
-            {
-                Urls = new[] { "http://+:5001" },
-                StartAdminInterface = true
-            });
-
-            stub.Given(
-                Request.Create()
-                .WithPath("/helloworld")
-                .UsingGet())
-                .RespondWith(Response.Create()
-                .WithStatusCode(200)
-                .WithHeader("Content-Type", "application/json")
-                .WithBodyAsJson(new { Message = "Hello world" }));
-
-            Console.WriteLine("Press any key to stop the server...");
-            Console.ReadLine();
-            stub.Stop();
+            CreateHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

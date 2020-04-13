@@ -1,0 +1,1 @@
+﻿Bank simulator to simulate the payment details check and money transfer to the seller.
