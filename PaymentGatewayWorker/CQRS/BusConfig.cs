@@ -11,7 +11,7 @@ namespace PaymentGatewayWorker.CQRS
     {
         public static void Initialize(IBus bus)
         {
-            bus.RegisterSaga<AddPaymentSaga>();
+            bus.RegisterSaga<PaymentSaga>();
             bus.RegisterHandler<AddNewPaymentSuccessHandler>();
             bus.RegisterHandler<AddNewPaymentErrorHandler>();
         }

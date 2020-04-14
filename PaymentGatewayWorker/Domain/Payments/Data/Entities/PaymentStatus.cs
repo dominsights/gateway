@@ -7,7 +7,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
     enum PaymentStatus
     {
         CREATED,
-        SENT,
+        PENDING,
         APPROVED,
         DENIED
     }
