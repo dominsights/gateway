@@ -11,7 +11,7 @@ namespace PaymentGatewayWorker.Domain.Services
     {
         private readonly PaymentRepository _paymentRepository;
 
-        public Payment ValidateToCreate(Payment payment)
+        public Payments.Payment ValidateToCreate(Payments.Payment payment)
         {
             if(!payment.IsValid())
             {

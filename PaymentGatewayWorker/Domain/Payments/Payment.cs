@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace PaymentGatewayWorker.Domain
+namespace PaymentGatewayWorker.Domain.Payments
 {
     public class Payment
     {

@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CQRS
+namespace PaymentGatewayWorker.CQRS.CommandStack
 {
     public class Event : Message
     {
         public DateTime TimeStamp { get; private set; }
+        public DateTime When { get; set; }
+        public Domain.Payments.Payment Data { get; set; }
 
         public Event()
-            :base()
+            : base()
         {
             TimeStamp = DateTime.UtcNow;
-            Name = this.GetType().Name;
+            Name = GetType().Name;
         }
     }
 }

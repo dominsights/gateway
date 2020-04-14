@@ -20,12 +20,9 @@ namespace PaymentGatewayWorker
         private ILogger<RabbitMqConsumer> _logger;
         private RabbitMqConfig _rabbitMQConfig;
         private ProcessPaymentAppService _processPaymentAppService;
-        private IBus _bus;
 
         public void StartListeningForPaymentRequests()
         {
-            BusConfig.Initialize(_bus);
-
             var factory = new ConnectionFactory()
             {
                 HostName = _rabbitMQConfig.HostName,
@@ -91,12 +88,11 @@ namespace PaymentGatewayWorker
             Dispose(true);
         }
 
-        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig, ProcessPaymentAppService processPaymentAppService, IBus bus) : this()
+        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig, ProcessPaymentAppService processPaymentAppService) : this()
         {
             _logger = logger;
             _rabbitMQConfig = rabbitMQConfig.Value;
             _processPaymentAppService = processPaymentAppService;
-            _bus = bus;
         }
 
         // Necessary for mocking

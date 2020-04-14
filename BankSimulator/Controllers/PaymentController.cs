@@ -25,21 +25,30 @@ namespace BankSimulator.Controllers
 
         // POST: api/Payment
         [HttpPost]
-        public async Task Post([FromBody] Payment payment)
+        public async Task<Guid> Post([FromBody] Payment payment)
         {
             // Check card info
             // Process payment details
             // Send money to seller
 
             // Mock a approved response with the payment id
+            var id = Guid.NewGuid(); // payment identifier on bank side
+            
             var response = new PaymentResponse()
             {
-                Id = payment.Id,
+                Id = id,
                 Status = Status.APPROVED
             };
 
             // Calls the SignalR client to send response
-            await _hubContext.Clients.All.SendAsync("PaymentResponse", response);
+            Task.Run(async () =>
+            {
+                // Delay execution for 3 seconds
+                await Task.Delay(3 * 1000);
+            _hubContext.Clients.All.SendAsync("PaymentResponse", response);
+            });
+
+            return id;
         }
 
         public PaymentController(IHubContext<PaymentHub> hubContext)

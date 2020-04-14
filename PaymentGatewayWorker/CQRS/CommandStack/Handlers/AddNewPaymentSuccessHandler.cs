@@ -1,15 +1,16 @@
-﻿using CQRS;
+﻿using MediatR;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;
+using PaymentGatewayWorker.EventSourcing;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
 {
-    public class AddNewPaymentSuccessHandler : IHandleMessage<PaymentCreatedEvent>
+    public class AddNewPaymentSuccessHandler : INotificationHandler<PaymentCreatedEvent>
     {
-        private IBus _bus;
         private IEventStore _eventStore;
 
         public Task HandleAsync(PaymentCreatedEvent message)
@@ -18,9 +19,13 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
             throw new NotImplementedException();
         }
 
-        public AddNewPaymentSuccessHandler(IBus bus, IEventStore eventStore)
+        public Task Handle(PaymentCreatedEvent notification, CancellationToken cancellationToken)
         {
-            _bus = bus;
+            throw new NotImplementedException();
+        }
+
+        public AddNewPaymentSuccessHandler(IEventStore eventStore)
+        {
             _eventStore = eventStore;
         }
     }

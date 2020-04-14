@@ -1,76 +1,66 @@
-﻿using CQRS;
-using Microsoft.Extensions.Logging;
-using PaymentGatewayWorker.CQRS.CommandStack.Commands;
-using PaymentGatewayWorker.CQRS.CommandStack.Events;
-using PaymentGatewayWorker.Domain;
-using PaymentGatewayWorker.Domain.Payments.Data.Repository;
-using PaymentGatewayWorker.Domain.Payments.Services;
+﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+
+using CQRS;
+using PaymentGatewayWorker.Domain.Payments.Services;
+using PaymentGatewayWorker.CQRS.CommandStack.Events;
+using MediatR;
+using System.Threading;
+using PaymentGatewayWorker.EventSourcing;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 {
-    public class PaymentSaga : Saga,
-        IStartWithMessage<AddNewPaymentCommand>,
-        IHandleMessage<PaymentCreatedEvent>
+    class PaymentSaga :
+        IRequestHandler<AddNewPaymentCommand>,
+        INotificationHandler<PaymentCreatedEvent>
     {
         private ILogger<PaymentSaga> _logger;
         private IRepository _respository;
-        private IBus _bus;
+        private IMediator _mediator;
         private BankService _bankService;
 
-        public async Task HandleAsync(AddNewPaymentCommand message)
+        public async Task<Unit> Handle(AddNewPaymentCommand request, CancellationToken cancellationToken)
         {
-            var request = Payment.Factory.NewPayment(message.AggregateId, message.UserId, message.CardNumber,
-                message.ExpiryMonth, message.ExpiryYear, message.Amount, message.CurrencyCode, message.CVV);
+            var payment = Domain.Payments.Payment.Factory.NewPayment(request.AggregateId, request.UserId, request.CardNumber,
+                request.ExpiryMonth, request.ExpiryYear, request.Amount, request.CurrencyCode, request.CVV);
 
-            var response = await _respository.CreateFromRequestAsync(request);
+            var response = await _respository.CreateFromRequestAsync(payment);
 
             if (!response.Success)
             {
                 var errorEvent = new AddNewPaymentErrorEvent();
-                await _bus.RaiseEventAsync(errorEvent);
+                await _mediator.Send(errorEvent);
             }
 
-            var createdEvent = new PaymentCreatedEvent(request.Id, request);
-            await _bus.RaiseEventAsync(createdEvent);
+            var createdEvent = new PaymentCreatedEvent(request.AggregateId, payment);
+            await _mediator.Publish(createdEvent);
+            return Unit.Value;
         }
 
-        public async Task HandleAsync(PaymentCreatedEvent message)
+        public async Task Handle(PaymentCreatedEvent notification, CancellationToken cancellationToken)
         {
-            var command = new SendPaymentForBankApprovalCommand(message.AggregateId, message.Data.UserId, message.Data.CardNumber, message.Data.ExpiryMonth,
-                message.Data.ExpiryMonth, message.Data.Amount, message.Data.CurrencyCode, message.Data.CVV);
-
             try
             {
-                var response = await _bankService.SendPaymentForBankApprovalAsync(command);
+                var response = await _bankService.SendPaymentForBankApprovalAsync(notification.Data);
 
-                var sentToBankEvent = new PaymentSentForBankApprovalEvent(command.AggregateId, message.Data);
-                await _bus.RaiseEventAsync(sentToBankEvent);
+                var sentToBankEvent = new PaymentSentForBankApprovalEvent(notification.AggregateId, notification.Data);
+                await _mediator.Send(sentToBankEvent);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error while trying to send payment to bank.");
                 var errorEvent = new SendPaymentForBankApprovalErrorEvent();
-                await _bus.RaiseEventAsync(errorEvent);
+                await _mediator.Send(errorEvent);
             }
         }
 
-        public PaymentSaga(IBus bus, IEventStore eventStore, IRepository repository, BankService bankService, ILogger<PaymentSaga> logger)
-            : base(bus, eventStore)
+        public PaymentSaga(IMediator mediator, IEventStore eventStore, IRepository repository, BankService bankService, ILogger<PaymentSaga> logger)
         {
             _logger = logger;
             _respository = repository;
-            _bus = bus;
+            _mediator = mediator;
             _bankService = bankService;
         }
-
-        //public AddPaymentSaga(IBus bus, IEventStore eventStore, IRepository repository)
-        //    : base(bus, eventStore)
-        //{
-
-        //}
     }
 }

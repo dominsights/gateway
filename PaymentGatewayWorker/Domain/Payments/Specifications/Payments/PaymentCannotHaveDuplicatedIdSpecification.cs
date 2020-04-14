@@ -9,7 +9,7 @@ using PaymentGatewayWorker.Domain.Payments.Interfaces;
 
 namespace PaymentGatewayWorker.Domain.Specifications.Payments
 {
-    class PaymentCannotHaveDuplicatedIdSpecification : ISpecification<Payment>
+    class PaymentCannotHaveDuplicatedIdSpecification : ISpecification<Domain.Payments.Payment>
     {
         private IPaymentRepository _paymentRepository;
 
@@ -18,7 +18,7 @@ namespace PaymentGatewayWorker.Domain.Specifications.Payments
             _paymentRepository = paymentRepository;
         }
 
-        public bool IsSatisfiedBy(Payment entity)
+        public bool IsSatisfiedBy(Domain.Payments.Payment entity)
         {
             // TODO: Extend ISpecification to support async
             return _paymentRepository.GetByIdAsync(entity.Id).Result == null;

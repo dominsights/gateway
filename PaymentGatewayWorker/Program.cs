@@ -15,6 +15,8 @@ using Microsoft.Extensions.Options;
 using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson;
+using MediatR;
+using PaymentGatewayWorker.Domain.Payments.Services;
 
 namespace PaymentGatewayWorker
 {
@@ -40,7 +42,6 @@ namespace PaymentGatewayWorker
 
                     services.Configure<RabbitMqConfig>(rabbitMqConfig);
                     services.AddTransient<RabbitMqConsumer>();
-                    services.AddTransient<IBus, InMemoryBus>();
                     services.AddTransient<IEventStore, EventStore>();
                     services.AddTransient<EventRepository>();
                     services.AddTransient<ProcessPaymentAppService>();
@@ -48,6 +49,9 @@ namespace PaymentGatewayWorker
                     services.AddTransient<PaymentRepository>();
                     services.AddHostedService<Worker>();
                     services.AddTransient<IRepository, PaymentRepository>();
+                    services.AddTransient<BankService>();
+
+                    services.AddMediatR(typeof(Program));
 
                     var mapperConfig = MapperConfigurationFactory.MapperConfiguration;
                     services.AddSingleton(mapperConfig.CreateMapper());

@@ -1,4 +1,5 @@
-﻿using DomainValidationCore.Validation;
+﻿using CQRS;
+using DomainValidationCore.Validation;
 using PaymentGatewayWorker.Domain.Payments.Specifications.Payments;
 using PaymentGatewayWorker.EventSourcing;
 using System;

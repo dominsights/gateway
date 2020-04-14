@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.Domain;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,11 @@ namespace PaymentGatewayWorker.Mapper
     {
         public PaymentProfile()
         {
-            CreateMap<PaymentDto, Payment>();
-            CreateMap<Payment, Entities.Payment>();
-            CreateMap<Payment, Entities.PaymentReadModel>();
-            CreateMap<Entities.Payment, Payment>();
+            CreateMap<PaymentDto, Domain.Payments.Payment>();
+            CreateMap<Domain.Payments.Payment, Entities.Payment>();
+            CreateMap<Domain.Payments.Payment, Entities.PaymentReadModel>();
+            CreateMap<Entities.Payment, Domain.Payments.Payment>();
+            CreateMap<SendPaymentForBankApprovalCommand, Domain.Payments.Payment>();
 
 
     //        CreateMap<PaymentInput, PaymentDto>()

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CQRS;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using PaymentGatewayWorker.CQRS;
 using PaymentGatewayWorker.Domain;
@@ -16,11 +17,11 @@ namespace PaymentGatewayWorker
         private ILogger<ProcessPaymentAppService> _logger;
         private IMapper _mapper;
         private PaymentService _paymentService;
-        private IBus _bus;
+        private IMediator _mediator;
 
         internal void ProcessPayments(PaymentDto paymentDto)
         {
-            var payment = _mapper.Map<Payment>(paymentDto);
+            var payment = _mapper.Map<Domain.Payments.Payment>(paymentDto);
             var paymentResult = _paymentService.ValidateToCreate(payment);
 
             if (paymentResult.ValidationResult.IsValid)
@@ -35,7 +36,7 @@ namespace PaymentGatewayWorker
                     payment.CurrencyCode,
                     payment.CVV);
 
-                _bus.Send(command);
+                _mediator.Send(command);
             }
             else
             {
@@ -45,12 +46,12 @@ namespace PaymentGatewayWorker
             }
         }
 
-        public ProcessPaymentAppService(ILogger<ProcessPaymentAppService> logger, IMapper mapper, PaymentService paymentService, IBus bus)
+        public ProcessPaymentAppService(ILogger<ProcessPaymentAppService> logger, IMapper mapper, PaymentService paymentService, IMediator mediator)
         {
             _logger = logger;
             _mapper = mapper;
             _paymentService = paymentService;
-            _bus = bus;
+            _mediator = mediator;
         }
     }
 }

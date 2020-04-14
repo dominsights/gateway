@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace BankSimulator
 {
@@ -28,6 +29,10 @@ namespace BankSimulator
         {
             services.AddControllers();
             services.AddSignalR();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bank API", Version = "v1", Description = "Initial API to help sandbox testing in development environment." });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +53,13 @@ namespace BankSimulator
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<PaymentHub>("/paymentHub");
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Bank API V1");
             });
         }
     }

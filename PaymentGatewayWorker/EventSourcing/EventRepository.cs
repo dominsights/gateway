@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.Domain.Payments.Data;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,12 @@ namespace PaymentGatewayWorker.EventSourcing
         {
             var events = _dbContext.LoggedEvents.Where(e => e.AggregateId == aggregateId);
             return await events.ToListAsync();
+        }
+
+        internal async Task<bool> IsApprovedOrDenied(Guid id)
+        {
+            string actionName = nameof(PaymentSentForBankApprovalEvent);
+            return await _dbContext.LoggedEvents.AnyAsync(x => x.Action == actionName);
         }
 
         public EventRepository(PaymentsDbContext dbContext)

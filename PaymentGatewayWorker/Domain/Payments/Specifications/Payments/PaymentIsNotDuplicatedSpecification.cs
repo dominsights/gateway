@@ -8,7 +8,7 @@ using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 
 namespace PaymentGatewayWorker.Domain.Specifications.Payments
 {
-    class PaymentIsNotDuplicatedSpecification : ISpecification<Payment>
+    class PaymentIsNotDuplicatedSpecification : ISpecification<Domain.Payments.Payment>
     {
         private PaymentRepository _paymentRepository;
 
@@ -17,7 +17,7 @@ namespace PaymentGatewayWorker.Domain.Specifications.Payments
             _paymentRepository = paymentRepository;
         }
 
-        public bool IsSatisfiedBy(Payment entity)
+        public bool IsSatisfiedBy(Domain.Payments.Payment entity)
         {
             // I'm assuming these field are enough to check if the payment is duplicated.
             var paymentFilter = new PaymentFilter()

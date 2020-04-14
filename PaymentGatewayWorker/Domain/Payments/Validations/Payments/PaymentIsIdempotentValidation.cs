@@ -8,15 +8,15 @@ using System.Text;
 
 namespace PaymentGatewayWorker.Domain.Validations.Payments
 {
-    class PaymentIsIdempotentValidation : Validator<Payment>
+    class PaymentIsIdempotentValidation : Validator<Domain.Payments.Payment>
     {
         public PaymentIsIdempotentValidation(PaymentRepository paymentRepository)
         {
             var duplicatedId = new PaymentCannotHaveDuplicatedIdSpecification(paymentRepository);
             var duplicatedPayment = new PaymentIsNotDuplicatedSpecification(paymentRepository);
 
-            base.Add("duplicatedId", new Rule<Payment>(duplicatedId, "A payment with the same id already exists."));
-            base.Add("duplicatedPayment", new Rule<Payment>(duplicatedPayment, "A payment has already been made with the same payment details already exists."));
+            base.Add("duplicatedId", new Rule<Domain.Payments.Payment>(duplicatedId, "A payment with the same id already exists."));
+            base.Add("duplicatedPayment", new Rule<Domain.Payments.Payment>(duplicatedPayment, "A payment has already been made with the same payment details already exists."));
         }
     }
 }
