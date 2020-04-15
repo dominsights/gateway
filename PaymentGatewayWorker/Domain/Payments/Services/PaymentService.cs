@@ -16,7 +16,7 @@ namespace PaymentGatewayWorker.Domain.Services
         private readonly PaymentRepository _paymentRepository;
         private readonly EventRepository _eventRepository;
 
-        public Payments.Payment ValidateToCreate(Payments.Payment payment)
+        public virtual Payments.Payment ValidateToCreate(Payments.Payment payment)
         {
             if(!payment.IsValid())
             {
@@ -28,13 +28,7 @@ namespace PaymentGatewayWorker.Domain.Services
             return payment;
         }
 
-        public PaymentService(PaymentRepository paymentRepository, EventRepository eventRepository)
-        {
-            _paymentRepository = paymentRepository;
-            _eventRepository = eventRepository;
-        }
-
-        internal async Task<Payments.Payment> ValidateToUpdateStatusAsync(PaymentHubResponse response)
+        internal virtual async Task<Payments.Payment> ValidateToUpdateStatusAsync(PaymentHubResponse response)
         {
             var payment = await _paymentRepository.GetByBankResponseIdAsync(response.Id);
 
@@ -46,6 +40,18 @@ namespace PaymentGatewayWorker.Domain.Services
             payment.ValidationResult = new PaymentIsAlreadyValidatedByBankValidation(_eventRepository).Validate(payment);
 
             return payment;
+        }
+
+        public PaymentService(PaymentRepository paymentRepository, EventRepository eventRepository)
+        {
+            _paymentRepository = paymentRepository;
+            _eventRepository = eventRepository;
+        }
+
+        // Necessary for mocking
+        protected PaymentService()
+        {
+
         }
     }
 }

@@ -18,7 +18,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Services
         private EventRepository _eventRepository;
         private BankApiClient _bankApiClient;
 
-        public async Task<Guid> SendPaymentForBankApprovalAsync(Payment payment)
+        public virtual async Task<Guid> SendPaymentForBankApprovalAsync(Payment payment)
         {
             PaymentIsAlreadyValidatedByBankValidation paymentIsOkToSendToBankValidation = new PaymentIsAlreadyValidatedByBankValidation(_eventRepository);
 
@@ -49,6 +49,12 @@ namespace PaymentGatewayWorker.Domain.Payments.Services
 
             _eventRepository = eventRepository;
             _bankApiClient = client;
+        }
+
+        // Necessary for mocking
+        protected BankService()
+        {
+
         }
     }
 }

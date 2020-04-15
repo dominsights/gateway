@@ -2,17 +2,19 @@
 using PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
 {
+
     class BankResponseRepository
     {
         private PaymentsDbContext _paymentsDbContext;
         private ILogger<BankResponseRepository> _logger;
 
-        public async Task SaveBankResponseAsync(BankResponse bankResponse)
+        public virtual async Task SaveBankResponseAsync(BankResponse bankResponse)
         {
             await _paymentsDbContext.BankResponses.AddAsync(bankResponse);
             await _paymentsDbContext.SaveChangesAsync();
@@ -22,6 +24,12 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
         {
             _paymentsDbContext = paymentsDbContext;
             _logger = logger;
+        }
+
+        // Necessary for mocking
+        protected BankResponseRepository()
+        {
+
         }
     }
 }

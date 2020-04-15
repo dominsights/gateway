@@ -17,7 +17,10 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson;
 using MediatR;
 using PaymentGatewayWorker.Domain.Payments.Services;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("PaymentGatewayWorkerUnitTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 namespace PaymentGatewayWorker
 {
     public class Program

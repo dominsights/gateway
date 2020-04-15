@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
 {
-    public class AddNewPaymentErrorHandler : IHandleMessage<AddNewPaymentErrorEvent>
+    public class AddNewPaymentErrorHandler
     {
         public Task HandleAsync(AddNewPaymentErrorEvent message)
         {
