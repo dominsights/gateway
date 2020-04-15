@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CQRS
+namespace PaymentGatewayWorker.CQRS.CommandStack
 {
     public class Command : Message
     {

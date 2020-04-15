@@ -12,6 +12,7 @@ using CQRS;
 using Entities = PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
 {
@@ -41,6 +42,20 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
                 _logger.LogError(e, "Error while trying to add payment to database.");
                 throw;
             }
+        }
+
+        internal async Task<Payment> GetByBankResponseIdAsync(Guid id)
+        {
+            var query = from p in _paymentsDbContext.Payments
+                        join b in _paymentsDbContext.BankResponses
+                        on p.Id equals b.PaymentId
+                        where b.Id == id
+                        select p;
+
+            var entity = await query.FirstAsync();
+            Payment payment = _mapper.Map<Payment>(entity);
+
+            return payment;
         }
 
         public async Task<Payment> GetByIdAsync(Guid id)

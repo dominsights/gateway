@@ -3,7 +3,7 @@ using System;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Events
 {
-    public class PaymentSentForBankApprovalEvent : Event, IRequest
+    public class PaymentSentForBankApprovalEvent : Event, INotification
     {
         public PaymentSentForBankApprovalEvent(Guid id, Domain.Payments.Payment data)
             : base()

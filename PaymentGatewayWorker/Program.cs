@@ -50,6 +50,7 @@ namespace PaymentGatewayWorker
                     services.AddHostedService<Worker>();
                     services.AddTransient<IRepository, PaymentRepository>();
                     services.AddTransient<BankService>();
+                    services.AddTransient<BankResponseRepository>();
 
                     services.AddMediatR(typeof(Program));
 

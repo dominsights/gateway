@@ -28,8 +28,9 @@ namespace PaymentGatewayWorker.EventSourcing
 
         internal async Task<bool> IsApprovedOrDenied(Guid id)
         {
-            string actionName = nameof(PaymentSentForBankApprovalEvent);
-            return await _dbContext.LoggedEvents.AnyAsync(x => x.Action == actionName);
+            string actionName = nameof(PaymentAcceptedEvent);
+            bool any = await _dbContext.LoggedEvents.AnyAsync(x => x.Action == actionName && x.Id == id);
+            return !any;
         }
 
         public EventRepository(PaymentsDbContext dbContext)

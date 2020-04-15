@@ -28,5 +28,6 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
         [MinLength(3)]
         [MaxLength(3)]
         public string CVV { get; set; }
+        public BankResponse BankResponse { get; internal set; }
     }
 }

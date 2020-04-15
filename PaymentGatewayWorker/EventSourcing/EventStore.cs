@@ -13,8 +13,8 @@ namespace PaymentGatewayWorker.EventSourcing
 {
     class EventStore : IEventStore, 
         INotificationHandler<PaymentCreatedEvent>,
-        IRequestHandler<PaymentSentForBankApprovalEvent>
-
+        INotificationHandler<PaymentSentForBankApprovalEvent>,
+        INotificationHandler<PaymentAcceptedEvent>
     {
         private EventRepository _eventRepository;
         private ILogger<EventStore> _logger;
@@ -43,10 +43,14 @@ namespace PaymentGatewayWorker.EventSourcing
             await SaveAsync<Event>(notification);
         }
 
-        public async Task<Unit> Handle(PaymentSentForBankApprovalEvent request, CancellationToken cancellationToken)
+        public async Task Handle(PaymentSentForBankApprovalEvent request, CancellationToken cancellationToken)
         {
             await SaveAsync<Event>(request);
-            return Unit.Value;
+        }
+
+        public async Task Handle(PaymentAcceptedEvent notification, CancellationToken cancellationToken)
+        {
+            await SaveAsync<Event>(notification);
         }
 
         public EventStore(EventRepository eventRepository, ILogger<EventStore> logger)

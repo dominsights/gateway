@@ -8,9 +8,9 @@ using System.Text;
 
 namespace PaymentGatewayWorker.Domain.Payments.Validations.Payments
 {
-    class PaymentIsOkToSendToBankValidation : Validator<Payment>
+    class PaymentIsAlreadyValidatedByBankValidation : Validator<Payment>
     {
-        public PaymentIsOkToSendToBankValidation(EventRepository eventRepository)
+        public PaymentIsAlreadyValidatedByBankValidation(EventRepository eventRepository)
         {
             var specification = new PaymentCannotBeSentAgainSpecification(eventRepository);
 

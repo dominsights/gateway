@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using CQRS;
+using MediatR;
+using Microsoft.AspNetCore.SignalR.Client;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.Domain.Payments.Validations.Payments;
 using PaymentGatewayWorker.EventSourcing;
@@ -18,9 +20,9 @@ namespace PaymentGatewayWorker.Domain.Payments.Services
 
         public async Task<Guid> SendPaymentForBankApprovalAsync(Payment payment)
         {
-            PaymentIsOkToSendToBankValidation paymentIsOkToSendToBankValidation = new PaymentIsOkToSendToBankValidation(_eventRepository);
+            PaymentIsAlreadyValidatedByBankValidation paymentIsOkToSendToBankValidation = new PaymentIsAlreadyValidatedByBankValidation(_eventRepository);
 
-            if (!payment.IsValid() || paymentIsOkToSendToBankValidation.Validate(payment).IsValid)
+            if (!payment.IsValid() || !paymentIsOkToSendToBankValidation.Validate(payment).IsValid)
             {
                 throw new ArgumentException("Payment is invalid.");
             }
