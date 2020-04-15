@@ -26,7 +26,7 @@ namespace PaymentGatewayWorker.EventSourcing
             return await events.ToListAsync();
         }
 
-        internal async Task<bool> IsApprovedOrDenied(Guid id)
+        internal virtual async Task<bool> IsNotApprovedOrDenied(Guid id)
         {
             string actionName = nameof(PaymentAcceptedEvent);
             bool any = await _dbContext.LoggedEvents.AnyAsync(x => x.Action == actionName && x.Id == id);
@@ -36,6 +36,12 @@ namespace PaymentGatewayWorker.EventSourcing
         public EventRepository(PaymentsDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        // Necessary for mocking
+        protected EventRepository()
+        {
+
         }
     }
 }

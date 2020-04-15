@@ -44,7 +44,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
             }
         }
 
-        internal async Task<Payment> GetByBankResponseIdAsync(Guid id)
+        internal virtual async Task<Payment> GetByBankResponseIdAsync(Guid id)
         {
             var query = from p in _paymentsDbContext.Payments
                         join b in _paymentsDbContext.BankResponses
@@ -58,13 +58,13 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
             return payment;
         }
 
-        public async Task<Payment> GetByIdAsync(Guid id)
+        public virtual async Task<Payment> GetByIdAsync(Guid id)
         {
             var entity = await _paymentsDbContext.Payments.FindAsync(id);
             return _mapper.Map<Payment>(entity);
         }
 
-        public Task<Payment> GetByFilterAsync(PaymentFilter paymentFilter)
+        public virtual Task<Payment> GetByFilterAsync(PaymentFilter paymentFilter)
         {
             Task<Payment> task = new Task<Payment>(() =>
             {
@@ -118,6 +118,12 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
             _paymentsDbContext = paymentsDbContext;
             _mapper = mapper;
             _logger = logger;
+        }
+
+        // Necessary for mocking
+        protected PaymentRepository()
+        {
+
         }
     }
 }

@@ -20,7 +20,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Specifications.Payments
         {
             // check wether the events for the payment has a status of approved or denied
 
-            return _eventRepository.IsApprovedOrDenied(entity.Id).Result;
+            return _eventRepository.IsNotApprovedOrDenied(entity.Id).Result;
         }
     }
 }

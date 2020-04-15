@@ -3,6 +3,7 @@ using CQRS;
 using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
+using PaymentGatewayWorker.Domain.Payments.Facades;
 using PaymentGatewayWorker.Domain.Payments.Validations.Payments;
 using PaymentGatewayWorker.EventSourcing;
 using System;
@@ -16,7 +17,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Services
     class BankService
     {
         private EventRepository _eventRepository;
-        private BankApiClient _bankApiClient;
+        private BankApiClientFacade _bankApiClient;
 
         public virtual async Task<Guid> SendPaymentForBankApprovalAsync(Payment payment)
         {
@@ -27,28 +28,14 @@ namespace PaymentGatewayWorker.Domain.Payments.Services
                 throw new ArgumentException("Payment is invalid.");
             }
 
-            var request = new PaymentGatewayWorker.Payment
-            {
-                Amount = (double)payment.Amount,
-                CardNumber = payment.CardNumber,
-                CurrencyCode = payment.CurrencyCode,
-                Cvv = payment.CVV,
-                ExpiryMonth = payment.ExpiryMonth,
-                ExpiryYear = payment.ExpiryYear,
-                SellerId = payment.UserId
-            };
-
-            Guid bankProcessId = await _bankApiClient.PaymentAsync(request);
+            Guid bankProcessId = await _bankApiClient.SendPaymentToBankAsync(payment);
             return bankProcessId;
         }
 
-        public BankService(EventRepository eventRepository)
+        public BankService(EventRepository eventRepository, BankApiClientFacade bankApiClient)
         {
-            var httpClient = new HttpClient();
-            var client = new BankApiClient("https://localhost:5001/", httpClient);
-
             _eventRepository = eventRepository;
-            _bankApiClient = client;
+            _bankApiClient = bankApiClient;
         }
 
         // Necessary for mocking
