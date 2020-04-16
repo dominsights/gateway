@@ -19,13 +19,6 @@ namespace PaymentGatewayWorker.Mapper
             CreateMap<Domain.Payments.Payment, Entities.PaymentReadModel>();
             CreateMap<Entities.Payment, Domain.Payments.Payment>();
             CreateMap<SendPaymentForBankApprovalCommand, Domain.Payments.Payment>();
-
-
-    //        CreateMap<PaymentInput, PaymentDto>()
-    //.ForMember(p => p.UserId, opt => opt.Ignore())
-    //.ForMember(p => p.Id, opt => opt.Ignore());
-
-
         }
     }
 }

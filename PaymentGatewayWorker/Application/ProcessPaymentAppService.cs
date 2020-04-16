@@ -27,14 +27,14 @@ namespace PaymentGatewayWorker
             if (paymentResult.ValidationResult.IsValid)
             {
                 var command = new AddNewPaymentCommand(
-                    payment.UserId,
-                    payment.Id,
-                    payment.CardNumber,
-                    payment.ExpiryMonth,
-                    payment.ExpiryYear,
-                    payment.Amount,
-                    payment.CurrencyCode,
-                    payment.CVV);
+                    paymentResult.UserId,
+                    paymentResult.Id,
+                    paymentResult.CardNumber,
+                    paymentResult.ExpiryMonth,
+                    paymentResult.ExpiryYear,
+                    paymentResult.Amount,
+                    paymentResult.CurrencyCode,
+                    paymentResult.CVV);
 
                 _mediator.Send(command);
             }
