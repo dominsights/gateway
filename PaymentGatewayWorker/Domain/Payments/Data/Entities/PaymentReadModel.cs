@@ -8,9 +8,6 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
 {
     class PaymentReadModel
     {
-        // add status - CREATED, APPROVED, DENIED etc
-        // add data to check payment details
-
         [BsonId]
         public Guid Id { get; set; }
         [BsonRequired]
@@ -18,15 +15,9 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
         [BsonRequired]
         public string CardNumber { get; set; }
         [BsonRequired]
-        public int ExpiryMonth { get; set; }
-        [BsonRequired]
-        public int ExpiryYear { get; set; }
-        [BsonRequired]
         public decimal Amount { get; set; }
         [BsonRequired]
         public string CurrencyCode { get; set; }
-        [BsonRequired]
-        public string CVV { get; set; }
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
         public PaymentStatus Status { get; internal set; }

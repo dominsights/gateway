@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using PaymentGateway.Payments.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,11 @@ namespace PaymentGateway.Payments.Services
             _logger.LogInformation($"Sending payment with id {dto.Id} to messaging service.");
             await _messagingService.SendPaymentAsync(paymentSerialized);
             return dto.Id;
+        }
+
+        public virtual Task<PaymentDetailsDto> GetPaymentDetailsAsync(Guid guid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

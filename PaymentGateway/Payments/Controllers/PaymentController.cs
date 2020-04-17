@@ -17,13 +17,13 @@ namespace PaymentGateway.Payments.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private PaymentService _paymentAppService;
+        private PaymentService _paymentService;
         private ILogger<PaymentController> _logger;
         private IMapper _mapper;
 
-        public PaymentController(PaymentService paymentAppService, ILogger<PaymentController> logger, IMapper mapper)
+        public PaymentController(PaymentService paymentService, ILogger<PaymentController> logger, IMapper mapper)
         {
-            _paymentAppService = paymentAppService;
+            _paymentService = paymentService;
             _logger = logger;
             _mapper = mapper;
         }
@@ -37,12 +37,23 @@ namespace PaymentGateway.Payments.Controllers
 
         // GET: api/Payment/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
+            try
+            {
+                var paymentDetails = await _paymentService.GetPaymentDetailsAsync(id);
 
+                if(paymentDetails == null)
+                {
+                    return BadRequest(id);
+                }
 
-
-            return "value";
+                return Ok(paymentDetails);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // POST: api/Payment
@@ -54,7 +65,7 @@ namespace PaymentGateway.Payments.Controllers
 
             try
             {
-                var paymentId = await _paymentAppService.ProcessPaymentAsync(dto);
+                var paymentId = await _paymentService.ProcessPaymentAsync(dto);
                 dto.Id = paymentId;
                 _logger.LogInformation($"Payment {paymentId} succesfully created for user {User.Identity.Name}");
                 return Accepted(dto);
