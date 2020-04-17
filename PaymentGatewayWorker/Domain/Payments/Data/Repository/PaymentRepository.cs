@@ -84,11 +84,6 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
 
         // IRepository
 
-        public T GetById<T>(int id) where T : class
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<CommandResponse> CreateFromRequestAsync<T>(T item) where T : class
         {
             var request = item as Payment;
@@ -105,9 +100,12 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
             }
         }
 
-        public CommandResponse Update<T>(T item) where T : class
+        public virtual async Task UpdatePaymentReadModelStatusAsync(Guid aggregateId, PaymentStatus paymentStatus)
         {
-            throw new NotImplementedException();
+            var filter = Builders<PaymentReadModel>.Filter.Eq(p => p.Id, aggregateId);
+            var update = Builders<PaymentReadModel>.Update.Set(p => p.Status, paymentStatus);
+
+            await _paymentsRead.UpdateOneAsync(filter, update);
         }
 
         public PaymentRepository(MongoDbSettings mongoDbSettings, PaymentsDbContext paymentsDbContext, IMapper mapper, ILogger<PaymentRepository> logger)

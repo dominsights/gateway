@@ -27,7 +27,7 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
                 await _mediator.Send(errorEvent);
             }
 
-            var createdEvent = new PaymentCreatedEvent(request.AggregateId, payment);
+            var createdEvent = new PaymentCreatedEvent(request.AggregateId, payment.UserId, payment.CardNumber, payment.ExpiryMonth, payment.ExpiryYear, payment.Amount, payment.CurrencyCode, payment.CVV);
             await _mediator.Publish(createdEvent);
             return Unit.Value;
         }

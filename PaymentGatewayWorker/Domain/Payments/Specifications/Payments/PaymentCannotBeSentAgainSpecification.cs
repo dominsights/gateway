@@ -16,11 +16,9 @@ namespace PaymentGatewayWorker.Domain.Payments.Specifications.Payments
             this._eventRepository = eventRepository;
         }
 
-        public bool IsSatisfiedBy(Payment entity)
+        public bool IsSatisfiedBy(Payment payment)
         {
-            // check wether the events for the payment has a status of approved or denied
-
-            return _eventRepository.IsNotApprovedOrDenied(entity.Id).Result;
+            return _eventRepository.IsNotApprovedOrDenied(payment.Id).Result;
         }
     }
 }

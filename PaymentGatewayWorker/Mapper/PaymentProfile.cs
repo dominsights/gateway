@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
+using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.Domain;
+using PaymentGatewayWorker.Domain.Payments.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +21,8 @@ namespace PaymentGatewayWorker.Mapper
             CreateMap<Domain.Payments.Payment, Entities.PaymentReadModel>();
             CreateMap<Entities.Payment, Domain.Payments.Payment>();
             CreateMap<SendPaymentForBankApprovalCommand, Domain.Payments.Payment>();
+            CreateMap<PaymentCreatedEvent, Domain.Payments.Payment>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.AggregateId));
         }
     }
 }

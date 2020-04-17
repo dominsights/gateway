@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PaymentGatewayWorker.CQRS.CommandStack.Events;
+using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.Domain.Payments.Services;
 
 namespace PaymentGatewayWorker

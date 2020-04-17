@@ -13,6 +13,7 @@ using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 using PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using PaymentGatewayWorker.Domain.Services;
 using System.Runtime.CompilerServices;
+using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 {
@@ -21,6 +22,7 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
         private ILogger<UpdatePaymentStatusWithBankResponseHandler> _logger;
         private IMediator _mediator;
         private PaymentService _paymentService;
+        private PaymentRepository _paymentRepository;
 
         public async Task<Unit> Handle(UpdatePaymentStatusWithBankResponseCommand request, CancellationToken cancellationToken)
         {
@@ -30,7 +32,8 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 
                 if (payment.ValidationResult.IsValid)
                 {
-                    var acceptedEvent = new PaymentAcceptedEvent(payment);
+                    var acceptedEvent = new PaymentAcceptedEvent(payment.Id);
+                    await _paymentRepository.UpdatePaymentReadModelStatusAsync(payment.Id, PaymentStatus.APPROVED);
                     await _mediator.Publish(acceptedEvent);
                 }
                 else
@@ -46,11 +49,12 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
             return Unit.Value;
         }
 
-        public UpdatePaymentStatusWithBankResponseHandler(IMediator mediator, ILogger<UpdatePaymentStatusWithBankResponseHandler> logger, PaymentService paymentService)
+        public UpdatePaymentStatusWithBankResponseHandler(IMediator mediator, ILogger<UpdatePaymentStatusWithBankResponseHandler> logger, PaymentService paymentService, PaymentRepository paymentRepository)
         {
             _logger = logger;
             _mediator = mediator;
             _paymentService = paymentService;
+            _paymentRepository = paymentRepository;
         }
     }
 }

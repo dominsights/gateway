@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentGatewayWorker.CQRS.CommandStack.Events
+namespace PaymentGatewayWorker.CQRS.CommandStack.Commands
 {
     class UpdatePaymentStatusWithBankResponseCommand : IRequest
     {

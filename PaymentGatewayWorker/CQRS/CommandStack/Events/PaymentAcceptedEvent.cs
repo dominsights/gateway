@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PaymentGatewayWorker.Domain.Payments;
+using PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,12 +10,13 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Events
 {
     class PaymentAcceptedEvent : Event, INotification
     {
-        public PaymentAcceptedEvent(Domain.Payments.Payment payment)
+        public PaymentAcceptedEvent(Guid paymentId)
             : base()
         {
-            AggregateId = payment.Id;
-            When = DateTime.UtcNow;
-            Data = payment;
+            AggregateId = paymentId;
+            PaymentStatus = PaymentStatus.APPROVED;
         }
+
+        public PaymentStatus PaymentStatus { get; private set; }
     }
 }

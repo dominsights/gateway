@@ -2,8 +2,11 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
+using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.CQRS.CommandStack.Sagas;
+using PaymentGatewayWorker.Domain.Payments.Data.Entities;
+using PaymentGatewayWorker.Domain.Payments.Data.Repository;
 using PaymentGatewayWorker.Domain.Payments.Services;
 using PaymentGatewayWorker.Domain.Services;
 using System;
@@ -25,18 +28,20 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
             var mediator = new Mock<IMediator>();
             var logger = new Mock<ILogger<UpdatePaymentStatusWithBankResponseHandler>>();
             var paymentService = new Mock<PaymentService>();
+            var paymentRepository = new Mock<PaymentRepository>();
 
             var payment = fixture.Build<PaymentGatewayWorker.Domain.Payments.Payment>().Create();
             payment.IsValid();
 
             paymentService.Setup(p => p.ValidateToUpdateStatusAsync(It.IsAny<PaymentHubResponse>())).Returns(Task.FromResult(payment));
 
-            var handler = new UpdatePaymentStatusWithBankResponseHandler(mediator.Object, logger.Object, paymentService.Object);
+            var handler = new UpdatePaymentStatusWithBankResponseHandler(mediator.Object, logger.Object, paymentService.Object, paymentRepository.Object);
 
             var @event = fixture.Build<UpdatePaymentStatusWithBankResponseCommand>().Create();
             handler.Handle(@event, new CancellationToken()).Wait();
 
             mediator.Verify(m => m.Publish(It.IsAny<PaymentAcceptedEvent>(), It.IsAny<CancellationToken>()), Times.Once);
+            paymentRepository.Verify(p => p.UpdatePaymentReadModelStatusAsync(It.IsAny<Guid>(), PaymentStatus.APPROVED), Times.Once);
         }
 
         [Fact]
@@ -47,6 +52,7 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
             var mediator = new Mock<IMediator>();
             var logger = new Mock<ILogger<UpdatePaymentStatusWithBankResponseHandler>>();
             var paymentService = new Mock<PaymentService>();
+            var paymentRepository = new Mock<PaymentRepository>();
 
             var payment = fixture.Build<PaymentGatewayWorker.Domain.Payments.Payment>().Create();
             payment.CardNumber = null;
@@ -54,12 +60,13 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
 
             paymentService.Setup(p => p.ValidateToUpdateStatusAsync(It.IsAny<PaymentHubResponse>())).Returns(Task.FromResult(payment));
 
-            var handler = new UpdatePaymentStatusWithBankResponseHandler(mediator.Object, logger.Object, paymentService.Object);
+            var handler = new UpdatePaymentStatusWithBankResponseHandler(mediator.Object, logger.Object, paymentService.Object, paymentRepository.Object);
 
             var @event = fixture.Build<UpdatePaymentStatusWithBankResponseCommand>().Create();
             handler.Handle(@event, new CancellationToken()).Wait();
 
             mediator.Verify(m => m.Publish(It.IsAny<PaymentAcceptedEvent>(), It.IsAny<CancellationToken>()), Times.Never);
+            paymentRepository.Verify(p => p.UpdatePaymentReadModelStatusAsync(It.IsAny<Guid>(), It.IsAny<PaymentStatus>()), Times.Never);
         }
 
         [Fact]
@@ -69,6 +76,8 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
 
             var mediator = new Mock<IMediator>();
             var logger = new Mock<ILogger<UpdatePaymentStatusWithBankResponseHandler>>();
+            var paymentRepository = new Mock<PaymentRepository>();
+
             var paymentService = new Mock<PaymentService>();
             paymentService.Setup(p => p.ValidateToUpdateStatusAsync(It.IsAny<PaymentHubResponse>())).ThrowsAsync(new Exception());
 
@@ -76,12 +85,13 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
             payment.CardNumber = null;
             payment.IsValid();
 
-            var handler = new UpdatePaymentStatusWithBankResponseHandler(mediator.Object, logger.Object, paymentService.Object);
+            var handler = new UpdatePaymentStatusWithBankResponseHandler(mediator.Object, logger.Object, paymentService.Object, paymentRepository.Object);
 
             var @event = fixture.Build<UpdatePaymentStatusWithBankResponseCommand>().Create();
             handler.Handle(@event, new CancellationToken()).Wait();
 
             mediator.Verify(m => m.Publish(It.IsAny<PaymentAcceptedEvent>(), It.IsAny<CancellationToken>()), Times.Never);
+            paymentRepository.Verify(p => p.UpdatePaymentReadModelStatusAsync(It.IsAny<Guid>(), It.IsAny<PaymentStatus>()), Times.Never);
         }
     }
 }

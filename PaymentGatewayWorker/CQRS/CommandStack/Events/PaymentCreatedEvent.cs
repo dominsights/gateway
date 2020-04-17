@@ -1,19 +1,29 @@
 ﻿using MediatR;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Events
 {
     public class PaymentCreatedEvent : Event, INotification
     {
-        public PaymentCreatedEvent(Guid id, Domain.Payments.Payment data)
-            : base()
+        public PaymentCreatedEvent(Guid aggregateId, Guid userId, string cardNumber, int expiryMonth, int expiryYear, decimal amount, string currencyCode, string cvv) : base()
         {
-            AggregateId = id;
-            When = DateTime.UtcNow;
-            Data = data;
+            AggregateId = aggregateId;
+            UserId = userId;
+            CardNumber = cardNumber;
+            ExpiryMonth = expiryMonth;
+            ExpiryYear = expiryYear;
+            Amount = amount;
+            CurrencyCode = currencyCode;
+            CVV = cvv;
         }
 
-        public DateTime When { get; set; }
-        public Domain.Payments.Payment Data { get; set; }
+        public Guid UserId { get; set; }
+        public string CardNumber { get; set; }
+        public int ExpiryMonth { get; set; }
+        public int ExpiryYear { get; set; }
+        public decimal Amount { get; set; }
+        public string CurrencyCode { get; set; }
+        public string CVV { get; set; }
     }
 }

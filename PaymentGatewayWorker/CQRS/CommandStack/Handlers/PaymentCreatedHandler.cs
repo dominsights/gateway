@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using PaymentGatewayWorker.Domain.Payments.Data.Repository;
@@ -18,22 +20,26 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
         private IMediator _mediator;
         private ILogger<PaymentCreatedHandler> _logger;
         private BankService _bankService;
+        private PaymentRepository _paymentRepository;
+        private IMapper _mapper;
 
         public async Task Handle(PaymentCreatedEvent notification, CancellationToken cancellationToken)
         {
             try
             {
-                var response = await _bankService.SendPaymentForBankApprovalAsync(notification.Data);
+                Domain.Payments.Payment payment = _mapper.Map<Domain.Payments.Payment>(notification);
+                var response = await _bankService.SendPaymentForBankApprovalAsync(payment);
 
                 var bankResponse = new BankResponse
                 {
                     Id = response,
-                    PaymentId = notification.Data.Id
+                    PaymentId = notification.AggregateId
                 };
 
                 await _bankResponseRepository.SaveBankResponseAsync(bankResponse);
+                await _paymentRepository.UpdatePaymentReadModelStatusAsync(notification.AggregateId, PaymentStatus.PROCESSING);
 
-                var sentToBankEvent = new PaymentSentForBankApprovalEvent(notification.AggregateId, notification.Data);
+                var sentToBankEvent = new PaymentSentForBankApprovalEvent(notification.AggregateId, bankResponse.Id);
                 await _mediator.Publish(sentToBankEvent);
             }
             catch (Exception e)
@@ -44,12 +50,14 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
             }
         }
 
-        public PaymentCreatedHandler(BankResponseRepository bankResponseRepository, IMediator mediator, ILogger<PaymentCreatedHandler> logger, BankService bankService)
+        public PaymentCreatedHandler(BankResponseRepository bankResponseRepository, IMediator mediator, ILogger<PaymentCreatedHandler> logger, BankService bankService, PaymentRepository paymentRepository, IMapper mapper)
         {
             _bankResponseRepository = bankResponseRepository;
             _mediator = mediator;
             _logger = logger;
             _bankService = bankService;
+            _paymentRepository = paymentRepository;
+            _mapper = mapper;
         }
     }
 }

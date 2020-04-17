@@ -5,14 +5,12 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Events
 {
     public class PaymentSentForBankApprovalEvent : Event, INotification
     {
-        public PaymentSentForBankApprovalEvent(Guid id, Domain.Payments.Payment data)
-            : base()
+        public PaymentSentForBankApprovalEvent(Guid aggregateId, Guid bankResponseId)
         {
-            AggregateId = id;
-            When = DateTime.UtcNow;
-            Data = data;
+            AggregateId = aggregateId;
+            BankResponseId = bankResponseId;
         }
 
-
+        public Guid BankResponseId { get; }
     }
 }

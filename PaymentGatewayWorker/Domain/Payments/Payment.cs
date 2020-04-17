@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace PaymentGatewayWorker.Domain.Payments
@@ -32,7 +33,19 @@ namespace PaymentGatewayWorker.Domain.Payments
 
         internal bool IsValid()
         {
-            ValidationResult = new PaymentIsValidValidation().Validate(this);
+            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+            bool isValid = Validator.TryValidateObject(this, new ValidationContext(this), validationResults);
+
+            ValidationResult = new DomainValidationCore.Validation.ValidationResult();
+
+            if (!isValid)
+            {
+                foreach (var result in validationResults)
+                {
+                    ValidationResult.Add(new DomainValidationCore.Validation.ValidationError(result.MemberNames.First(), result.ErrorMessage));
+                }
+            }
+
             return ValidationResult.IsValid;
         }
 
