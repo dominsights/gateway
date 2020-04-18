@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,16 +32,7 @@ namespace PaymentGatewayWorker
         {
             // Start listening for SignalR Hub
 
-            _connection = new HubConnectionBuilder()
-             .WithUrl("https://localhost:5001/paymentHub") // TODO: Move to configuration file
-             .Build();
-
-            _connection.On<PaymentHubResponse>("PaymentResponse", (response) =>
-            {
-                _mediator.Send(new UpdatePaymentStatusWithBankResponseCommand(response));
-            });
-
-            await _connection.StartAsync();
+            await StartListeningToSignalRAsync(stoppingToken);
 
             // Start listening for new payment requests
 
@@ -49,6 +41,43 @@ namespace PaymentGatewayWorker
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
+            }
+        }
+
+        private async Task StartListeningToSignalRAsync(CancellationToken stoppingToken)
+        {
+            _connection = new HubConnectionBuilder()
+                         .WithAutomaticReconnect()
+                         .WithUrl("https://localhost:5001/paymentHub") // TODO: Move to configuration file
+                         .Build();
+
+            _connection.On<PaymentHubResponse>("PaymentResponse", (response) =>
+            {
+                _mediator.Send(new UpdatePaymentStatusWithBankResponseCommand(response));
+            });
+
+            await ConnectWithRetryAsync(stoppingToken);
+        }
+
+        private async Task ConnectWithRetryAsync(CancellationToken stoppingToken)
+        {
+            while (true)
+            {
+                try
+                {
+                    await _connection.StartAsync();
+                    Debug.Assert(_connection.State == HubConnectionState.Connected);
+                    return;
+                }
+                catch when (stoppingToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                catch
+                {
+                    Debug.Assert(_connection.State == HubConnectionState.Disconnected);
+                    await Task.Delay(5000);
+                }
             }
         }
     }
