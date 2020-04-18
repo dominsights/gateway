@@ -41,7 +41,9 @@ namespace PaymentGateway.Payments.Controllers
         {
             try
             {
-                var paymentDetails = await _paymentService.GetPaymentDetailsAsync(id);
+                Guid user = new Guid(User.Identity.Name);
+
+                var paymentDetails = await _paymentService.GetPaymentDetailsAsync(id, user);
 
                 if(paymentDetails == null)
                 {

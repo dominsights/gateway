@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MongoDbRepository;
 using PaymentGatewayWorker.Domain.Payments;
 using PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using System;
@@ -14,9 +15,6 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Events
             : base()
         {
             AggregateId = paymentId;
-            PaymentStatus = PaymentStatus.APPROVED;
         }
-
-        public PaymentStatus PaymentStatus { get; private set; }
     }
 }

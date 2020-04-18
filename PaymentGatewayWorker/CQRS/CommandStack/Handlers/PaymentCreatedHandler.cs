@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using MongoDbRepository;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using PaymentGatewayWorker.Domain.Payments.Data.Repository;

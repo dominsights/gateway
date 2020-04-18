@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MongoDbRepository;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.Domain;
@@ -18,7 +19,7 @@ namespace PaymentGatewayWorker.Mapper
         {
             CreateMap<PaymentDto, Domain.Payments.Payment>();
             CreateMap<Domain.Payments.Payment, Entities.Payment>();
-            CreateMap<Domain.Payments.Payment, Entities.PaymentReadModel>();
+            CreateMap<Domain.Payments.Payment, PaymentReadModel>();
             CreateMap<Entities.Payment, Domain.Payments.Payment>();
             CreateMap<SendPaymentForBankApprovalCommand, Domain.Payments.Payment>();
             CreateMap<PaymentCreatedEvent, Domain.Payments.Payment>()

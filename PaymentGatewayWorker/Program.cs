@@ -18,6 +18,8 @@ using MongoDB.Bson;
 using MediatR;
 using PaymentGatewayWorker.Domain.Payments.Services;
 using System.Runtime.CompilerServices;
+using MongoDbRepository;
+using PaymentGatewayWorker.Domain.Payments.Facades;
 
 [assembly: InternalsVisibleTo("PaymentGatewayWorkerUnitTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
@@ -50,10 +52,12 @@ namespace PaymentGatewayWorker
                     services.AddTransient<ProcessPaymentAppService>();
                     services.AddTransient<PaymentService>();
                     services.AddTransient<PaymentRepository>();
+                    services.AddTransient<PaymentReadRepository>();
                     services.AddHostedService<Worker>();
                     services.AddTransient<IRepository, PaymentRepository>();
                     services.AddTransient<BankService>();
                     services.AddTransient<BankResponseRepository>();
+                    services.AddTransient<BankApiClientFacade>();
 
                     services.AddMediatR(typeof(Program));
 

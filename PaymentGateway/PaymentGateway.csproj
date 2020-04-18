@@ -23,5 +23,9 @@
     <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MongoDbRepository\MongoDbRepository.csproj" />
+  </ItemGroup>
+
 
 </Project>

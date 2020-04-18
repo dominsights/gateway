@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using MongoDbRepository;
 using Moq;
+using PaymentGateway.Payments.Models;
 using PaymentGateway.Payments.Services;
 using System;
 using System.Collections.Generic;
@@ -17,7 +20,7 @@ namespace PaymentGatewayUnitTests
         public void ShouldCallMessagingService()
         {
             var messagingMock = new Mock<RabbitMqPublisher>();
-            var paymentService = new PaymentService(messagingMock.Object, new Mock<ILogger<PaymentService>>().Object);
+            var paymentService = new PaymentService(messagingMock.Object, new Mock<ILogger<PaymentService>>().Object, new Mock<PaymentReadRepository>().Object, new Mock<IMapper>().Object);
 
             var dto = _fixture.Mapper.Map<PaymentDto>(_fixture.PaymentInput);
             dto.UserId = Guid.NewGuid();
@@ -29,6 +32,20 @@ namespace PaymentGatewayUnitTests
 
             string serializedPayment = JsonSerializer.Serialize(dto);
             messagingMock.Verify(m => m.SendPaymentAsync(serializedPayment), Times.Once);
+        }
+
+        [Fact]
+        public void ShouldReturnPaymentDetails()
+        {
+            Mock<PaymentReadRepository> paymentReadRepository = new Mock<PaymentReadRepository>();
+
+            var productId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+
+            var paymentService = new PaymentService(new Mock<RabbitMqPublisher>().Object, new Mock<ILogger<PaymentService>>().Object, paymentReadRepository.Object, new Mock<IMapper>().Object);
+            paymentService.GetPaymentDetailsAsync(productId, userId).Wait();
+
+            paymentReadRepository.Verify(p => p.GetPaymentDetailsAsync(productId, userId), Times.Once);
         }
 
         public PaymentServiceTests(PaymentGatewayFixture fixture)

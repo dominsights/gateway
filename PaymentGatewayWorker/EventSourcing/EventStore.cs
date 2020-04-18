@@ -25,7 +25,7 @@ namespace PaymentGatewayWorker.EventSourcing
             {
                 Action = @event.Name,
                 AggregateId = @event.AggregateId,
-                Data = JsonSerializer.Serialize(@event)
+                Data = JsonSerializer.Serialize(@event, @event.GetType())
             };
 
             try

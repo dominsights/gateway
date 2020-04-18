@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
+namespace MongoDbRepository
 {
-    class PaymentReadModel
+    public class PaymentReadModel
     {
         [BsonId]
         public Guid Id { get; set; }
@@ -20,6 +20,6 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
         public string CurrencyCode { get; set; }
         [BsonRepresentation(BsonType.String)]
         [BsonRequired]
-        public PaymentStatus Status { get; internal set; }
+        public PaymentStatus Status { get; set; }
     }
 }

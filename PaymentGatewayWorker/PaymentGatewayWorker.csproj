@@ -27,7 +27,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.5" />
-    <PackageReference Include="MongoDB.Driver" Version="2.10.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
     <PackageReference Include="NSwag.ApiDescription.Client" Version="13.0.5">
@@ -43,5 +42,9 @@
 
   <ItemGroup>
     <OpenApiReference Include="Swagger\BankApi.json" CodeGenerator="NSwagCSharp" Namespace="PaymentGatewayWorker.BankApi" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MongoDbRepository\MongoDbRepository.csproj" />
   </ItemGroup>
 </Project>

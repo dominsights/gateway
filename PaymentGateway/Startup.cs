@@ -12,6 +12,7 @@ using PaymentGateway.Authorization.Data;
 using PaymentGateway.Authorization.Services;
 using PaymentGateway.Payments.Services;
 using PaymentGateway.Mapper;
+using MongoDbRepository;
 
 namespace PaymentGateway
 {
@@ -29,6 +30,9 @@ namespace PaymentGateway
         {
             var config = Configuration.GetSection("jwt");
             var rabbitMqConfig = Configuration.GetSection("rabbitMq");
+
+            services.Configure<MongoDbSettings>(Configuration.GetSection(nameof(MongoDbSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddTransient<JwtHandler>();
             services.AddTransient<UserAccountRepository>();
             services.AddTransient<PaymentService>();
@@ -37,6 +41,8 @@ namespace PaymentGateway
             services.AddTransient<RabbitMqPublisher>();
             services.Configure<JwtSettings>(config);
             services.Configure<RabbitMqConfig>(rabbitMqConfig);
+            services.AddTransient<PaymentReadRepository>();
+
             services.AddControllers();
 
             services.AddDbContext<UserAccountDbContext>(options =>

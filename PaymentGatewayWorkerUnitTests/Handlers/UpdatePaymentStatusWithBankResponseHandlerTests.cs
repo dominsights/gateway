@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using MongoDbRepository;
 using Moq;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;

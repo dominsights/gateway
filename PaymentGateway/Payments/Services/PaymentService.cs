@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using MongoDbRepository;
 using PaymentGateway.Payments.Models;
 using System;
 using System.Collections.Generic;
@@ -12,17 +14,8 @@ namespace PaymentGateway.Payments.Services
     {
         private RabbitMqPublisher _messagingService;
         private ILogger<PaymentService> _logger;
-
-        public PaymentService(RabbitMqPublisher messagingService, ILogger<PaymentService> logger)
-        {
-            _messagingService = messagingService;
-            _logger = logger;
-        }
-
-        protected PaymentService()
-        {
-
-        }
+        private PaymentReadRepository _paymentReadRepository;
+        private IMapper _mapper;
 
         public virtual async Task<Guid> ProcessPaymentAsync(PaymentDto dto)
         {
@@ -34,9 +27,23 @@ namespace PaymentGateway.Payments.Services
             return dto.Id;
         }
 
-        public virtual Task<PaymentDetailsDto> GetPaymentDetailsAsync(Guid guid)
+        public async virtual Task<PaymentDetailsDto> GetPaymentDetailsAsync(Guid guid, Guid userId)
         {
-            throw new NotImplementedException();
+            var paymentRead = await _paymentReadRepository.GetPaymentDetailsAsync(guid, userId);
+            return _mapper.Map<PaymentDetailsDto>(paymentRead);
+        }
+
+        public PaymentService(RabbitMqPublisher messagingService, ILogger<PaymentService> logger, PaymentReadRepository paymentReadRepository, IMapper mapper)
+        {
+            _messagingService = messagingService;
+            _logger = logger;
+            _paymentReadRepository = paymentReadRepository;
+            _mapper = mapper;
+        }
+
+        protected PaymentService()
+        {
+
         }
     }
 }

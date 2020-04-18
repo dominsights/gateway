@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentGatewayWorker.Domain.Payments.Data.Entities
+namespace PaymentGateway.Payments.Models
 {
-    enum PaymentStatus
+    public enum PaymentStatus
     {
         CREATED,
         PROCESSING,

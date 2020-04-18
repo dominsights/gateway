@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MongoDbRepository;
 using PaymentGateway.Payments.Models;
 using PaymentGateway.Payments.Services;
 using System;
@@ -15,6 +16,7 @@ namespace PaymentGateway.Mapper
             CreateMap<PaymentInput, PaymentDto>()
                 .ForMember(p => p.UserId, opt => opt.Ignore())
                 .ForMember(p => p.Id, opt => opt.Ignore());
+            CreateMap<PaymentReadModel, PaymentDetailsDto>();
         }
     }
 }

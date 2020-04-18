@@ -3,6 +3,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using MongoDbRepository;
 using Moq;
 using PaymentGatewayWorker.CQRS.CommandStack.Events;
 using PaymentGatewayWorker.CQRS.CommandStack.Handlers;

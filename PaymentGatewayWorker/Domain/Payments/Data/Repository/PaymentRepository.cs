@@ -13,12 +13,13 @@ using Entities = PaymentGatewayWorker.Domain.Payments.Data.Entities;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using MongoDbRepository;
 
 namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
 {
     class PaymentRepository : IRepository, IPaymentRepository
     {
-        private IMongoCollection<PaymentReadModel> _paymentsRead;
+        private PaymentReadRepository _paymentReadRepository;
         private PaymentsDbContext _paymentsDbContext;
         private IMapper _mapper;
         private ILogger<PaymentRepository> _logger;
@@ -35,13 +36,20 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
 
                 var paymentRead = _mapper.Map<PaymentReadModel>(payment);
                 paymentRead.Status = PaymentStatus.CREATED;
-                await _paymentsRead.InsertOneAsync(paymentRead);
+                paymentRead.CardNumber = MaskCardNumber(payment.CardNumber);
+
+                await _paymentReadRepository.InsertOneAsync(paymentRead);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error while trying to add payment to database.");
                 throw;
             }
+        }
+
+        public static string MaskCardNumber(string cardNumber)
+        {
+            return "*****" + cardNumber.Substring(cardNumber.Length - 4);
         }
 
         internal virtual async Task<Payment> GetByBankResponseIdAsync(Guid id)
@@ -100,19 +108,14 @@ namespace PaymentGatewayWorker.Domain.Payments.Data.Repository
             }
         }
 
-        public virtual async Task UpdatePaymentReadModelStatusAsync(Guid aggregateId, PaymentStatus paymentStatus)
+        public virtual async Task UpdatePaymentReadModelStatusAsync(Guid aggregateId, MongoDbRepository.PaymentStatus paymentStatus)
         {
-            var filter = Builders<PaymentReadModel>.Filter.Eq(p => p.Id, aggregateId);
-            var update = Builders<PaymentReadModel>.Update.Set(p => p.Status, paymentStatus);
-
-            await _paymentsRead.UpdateOneAsync(filter, update);
+            await _paymentReadRepository.UpdatePaymentReadModelStatusAsync(aggregateId, paymentStatus);
         }
 
-        public PaymentRepository(MongoDbSettings mongoDbSettings, PaymentsDbContext paymentsDbContext, IMapper mapper, ILogger<PaymentRepository> logger)
+        public PaymentRepository(PaymentsDbContext paymentsDbContext, IMapper mapper, ILogger<PaymentRepository> logger, PaymentReadRepository paymentReadRepository)
         {
-            var client = new MongoClient(mongoDbSettings.ConnectionString);
-            var database = client.GetDatabase(mongoDbSettings.DatabaseName);
-            _paymentsRead = database.GetCollection<PaymentReadModel>(mongoDbSettings.PaymentsCollectionName);
+            _paymentReadRepository = paymentReadRepository;
             _paymentsDbContext = paymentsDbContext;
             _mapper = mapper;
             _logger = logger;

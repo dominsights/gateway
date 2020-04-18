@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaymentGatewayWorker.Domain.Payments.Data
+namespace MongoDbRepository
 {
-    class MongoDbSettings
+    public class MongoDbSettings
     {
         public string PaymentsCollectionName { get; set; }
         public string ConnectionString { get; set; }

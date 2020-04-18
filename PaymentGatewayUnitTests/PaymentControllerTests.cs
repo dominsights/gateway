@@ -41,7 +41,7 @@ namespace PaymentGatewayUnitTests
             var paymentDetailsMock = fixture.Build<PaymentDetailsDto>().Create();
 
             var paymentServiceMock = new Mock<PaymentService>();
-            paymentServiceMock.Setup(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>())).ReturnsAsync(paymentDetailsMock);
+            paymentServiceMock.Setup(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(paymentDetailsMock);
 
             var paymentController = new PaymentController(paymentServiceMock.Object, new Mock<ILogger<PaymentController>>().Object, _fixture.Mapper);
             paymentController.ControllerContext = _fixture.ControllerContext;
@@ -49,7 +49,7 @@ namespace PaymentGatewayUnitTests
             var response = paymentController.Get(Guid.NewGuid()).Result;
             var okResult = response as OkObjectResult;
 
-            paymentServiceMock.Verify(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>()), Times.Once);
+            paymentServiceMock.Verify(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
             Assert.NotNull(okResult);
             Assert.Equal(200, okResult.StatusCode);
         }
@@ -67,7 +67,7 @@ namespace PaymentGatewayUnitTests
             var response = paymentController.Get(Guid.NewGuid()).Result;
             var badRequestResult = response as BadRequestObjectResult;
 
-            paymentServiceMock.Verify(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>()), Times.Once);
+            paymentServiceMock.Verify(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
             Assert.NotNull(badRequestResult);
             Assert.Equal(400, badRequestResult.StatusCode);
         }
@@ -78,7 +78,7 @@ namespace PaymentGatewayUnitTests
             var fixture = new Fixture();
 
             var paymentServiceMock = new Mock<PaymentService>();
-            paymentServiceMock.Setup(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception());
+            paymentServiceMock.Setup(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>())).ThrowsAsync(new Exception());
 
             var paymentController = new PaymentController(paymentServiceMock.Object, new Mock<ILogger<PaymentController>>().Object, _fixture.Mapper);
             paymentController.ControllerContext = _fixture.ControllerContext;
@@ -86,7 +86,7 @@ namespace PaymentGatewayUnitTests
             var response = paymentController.Get(Guid.NewGuid()).Result;
             var badRequestResult = response as BadRequestResult;
 
-            paymentServiceMock.Verify(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>()), Times.Once);
+            paymentServiceMock.Verify(p => p.GetPaymentDetailsAsync(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
             Assert.NotNull(badRequestResult);
             Assert.Equal(400, badRequestResult.StatusCode);
         }
