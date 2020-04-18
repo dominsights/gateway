@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.Domain.Payments.Services;
 
@@ -18,24 +19,24 @@ namespace PaymentGatewayWorker
         private readonly ILogger<Worker> _logger;
         private readonly RabbitMqConsumer _rabbitMqConsumer;
         private readonly IMediator _mediator;
+        private readonly SignalRConfig _signalRConfig;
         HubConnection _connection;
 
 
-        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator)
+        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator, IOptions<SignalRConfig> signalRConfig)
         {
             _logger = logger;
             _rabbitMqConsumer = rabbitMqConsumer;
             _mediator = mediator;
+            _signalRConfig = signalRConfig.Value;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // Start listening for SignalR Hub
-
             await StartListeningToSignalRAsync(stoppingToken);
 
             // Start listening for new payment requests
-
             _rabbitMqConsumer.StartListeningForPaymentRequests();
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -48,7 +49,7 @@ namespace PaymentGatewayWorker
         {
             _connection = new HubConnectionBuilder()
                          .WithAutomaticReconnect()
-                         .WithUrl("https://localhost:5001/paymentHub") // TODO: Move to configuration file
+                         .WithUrl(_signalRConfig.ServerUrl)
                          .Build();
 
             _connection.On<PaymentHubResponse>("PaymentResponse", (response) =>

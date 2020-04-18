@@ -37,6 +37,7 @@ namespace PaymentGatewayWorker
                 .ConfigureServices((hostContext, services) =>
                 {
                     var rabbitMqConfig = hostContext.Configuration.GetSection("rabbitMq");
+                    var signalRConfig = hostContext.Configuration.GetSection("signalR");
 
                     var optionsBuilder = new DbContextOptionsBuilder<PaymentsDbContext>();
                     optionsBuilder.UseNpgsql(hostContext.Configuration.GetConnectionString("PostgresConnectionString"));
@@ -46,6 +47,7 @@ namespace PaymentGatewayWorker
                     services.AddSingleton(sp => sp.GetRequiredService<IOptions<MongoDbSettings>>().Value);
 
                     services.Configure<RabbitMqConfig>(rabbitMqConfig);
+                    services.Configure<SignalRConfig>(signalRConfig);
                     services.AddTransient<RabbitMqConsumer>();
                     services.AddTransient<IEventStore, EventStore>();
                     services.AddTransient<EventRepository>();
