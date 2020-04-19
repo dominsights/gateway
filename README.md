@@ -9,6 +9,10 @@ You will need to install the following applications:
 - RabbitMq;
 - Dotnet core 3;
 
+Setup database:
+
+- Restore the database using the file gateway_dump
+
 Projects setup (to run in localhost):
 
 - Set all start up configuration to IISExpress (otherwise you'll have to configure the url for the services inside the respectives appSettings.json files;
@@ -27,6 +31,10 @@ Configuration for PaymentGatewayWorker:
 - Configure postgres connection string in PaymentGatewayWorker/appSettings.json;
 - Add rabbitMq settings (if not using the defaults);
 - Configure the url for the Bank Simulator SignalR Hub (optional if you are using the IISExpress configuration);
+
+Architecture diagram:
+
+![Architecture diagram](https://github.com/domicioam/gateway/blob/master/Architecture.png)
 
 Improvements: 
 
