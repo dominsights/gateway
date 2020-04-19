@@ -28,5 +28,7 @@
     <ProjectReference Include="..\RabbitMQService\RabbitMQService.csproj" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 
 </Project>
