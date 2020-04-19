@@ -32,6 +32,10 @@ Configuration for PaymentGatewayWorker:
 - Add rabbitMq settings (if not using the defaults);
 - Configure the url for the Bank Simulator SignalR Hub (optional if you are using the IISExpress configuration);
 
+Testing:
+
+- I added a postman collection with some requests you can use to play using Postman;
+
 Architecture diagram:
 
 ![Architecture diagram](https://github.com/domicioam/gateway/blob/master/Architecture.png)
