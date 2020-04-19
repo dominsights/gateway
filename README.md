@@ -35,6 +35,9 @@ Configuration for PaymentGatewayWorker:
 Testing:
 
 - I added a postman collection with some requests you can use to play using Postman;
+- First you'll need to register a user;
+- Copy the token and go to "Send Payment" request;
+- Go to the Authentication tab and copy the token as Bearer Token;
 
 Architecture diagram:
 
