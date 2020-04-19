@@ -1,6 +1,6 @@
 This project simulates a payment gateway which interacts with a bank api and returns the payment details to the client.
 
-How to setup:
+**How to setup:**
 
 You will need to install the following applications:
 
@@ -9,11 +9,11 @@ You will need to install the following applications:
 - RabbitMq;
 - Dotnet core 3;
 
-Setup database:
+**Setup database:**
 
 - Restore the database using the file gateway_dump
 
-Projects setup (to run in localhost):
+**Projects setup (to run in localhost):**
 
 - Set all start up configuration to IISExpress (otherwise you'll have to configure the url for the services inside the respectives appSettings.json files;
 - Set multiple projects to startup (PaymentGateway, PaymentGatewayWorker and BankSimulator);
@@ -32,14 +32,14 @@ Configuration for PaymentGatewayWorker:
 - Add rabbitMq settings (if not using the defaults);
 - Configure the url for the Bank Simulator SignalR Hub (optional if you are using the IISExpress configuration);
 
-Testing:
+**Testing:**
 
 - I added a postman collection with some requests you can use to play using Postman;
 - First you'll need to register a user;
 - Copy the token and go to "Send Payment" request;
 - Go to the Authentication tab and copy the token as Bearer Token;
 
-Architecture diagram:
+**Architecture diagram:**
 
 ![Architecture diagram](https://github.com/domicioam/gateway/blob/master/Architecture.png)
 
