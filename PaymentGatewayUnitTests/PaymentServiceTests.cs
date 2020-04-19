@@ -4,6 +4,7 @@ using MongoDbRepository;
 using Moq;
 using PaymentGateway.Payments.Models;
 using PaymentGateway.Payments.Services;
+using RabbitMQService;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +32,7 @@ namespace PaymentGatewayUnitTests
             Assert.NotEqual(id, new Guid());
 
             string serializedPayment = JsonSerializer.Serialize(dto);
-            messagingMock.Verify(m => m.SendPaymentAsync(serializedPayment), Times.Once);
+            messagingMock.Verify(m => m.SendPaymentAsync(serializedPayment, It.IsAny<string>()), Times.Once);
         }
 
         [Fact]

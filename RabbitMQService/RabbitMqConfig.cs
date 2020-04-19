@@ -1,4 +1,4 @@
-﻿namespace PaymentGatewayWorker
+﻿namespace RabbitMQService
 {
     public class RabbitMqConfig
     {

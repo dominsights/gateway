@@ -1,7 +1,5 @@
-﻿using CQRS;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using PaymentGatewayWorker.CQRS;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -10,18 +8,19 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace PaymentGatewayWorker
+namespace RabbitMQService
 {
-    class RabbitMqConsumer
+    public delegate void DoWork(string message);
+    public class RabbitMqConsumer
     {
         private IConnection _connection;
         private IModel _channel;
-        private const string QUEUE_NAME = "payment_queue";
-        private ILogger<RabbitMqConsumer> _logger;
+        // private const string QUEUE_NAME = "payment_queue";
         private RabbitMqConfig _rabbitMQConfig;
-        private ProcessPaymentAppService _processPaymentAppService;
 
-        public void StartListeningForPaymentRequests()
+        public event DoWork DoWork;
+
+        public void StartListeningForPaymentRequests(string queueName)
         {
             var factory = new ConnectionFactory()
             {
@@ -32,39 +31,23 @@ namespace PaymentGatewayWorker
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: QUEUE_NAME, durable: true, exclusive: false,
+            _channel.QueueDeclare(queue: queueName, durable: true, exclusive: false,
                                     autoDelete: false, arguments: null);
 
             _channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += async (sender, e) =>
+            consumer.Received += (sender, e) =>
             {
                 var body = e.Body;
                 var message = Encoding.UTF8.GetString(body);
 
-                await DoWorkAsync(message);
+                DoWork(message);
 
                 _channel.BasicAck(deliveryTag: e.DeliveryTag, multiple: true);
             };
 
-            _channel.BasicConsume(queue: QUEUE_NAME, autoAck: false, consumer: consumer);
-        }
-
-        private async Task DoWorkAsync(string message)
-        {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
-                    _processPaymentAppService.ProcessPayments(paymentDto);
-                }
-                catch(Exception e)
-                {
-                    _logger.LogError(e, "Error while processing message.", message);
-                }
-            });
+            _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer);
         }
 
         private bool disposedValue = false; // To detect redundant calls
@@ -88,11 +71,9 @@ namespace PaymentGatewayWorker
             Dispose(true);
         }
 
-        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig, ProcessPaymentAppService processPaymentAppService) : this()
+        public RabbitMqConsumer(ILogger<RabbitMqConsumer> logger, IOptions<RabbitMqConfig> rabbitMQConfig) : this()
         {
-            _logger = logger;
             _rabbitMQConfig = rabbitMQConfig.Value;
-            _processPaymentAppService = processPaymentAppService;
         }
 
         // Necessary for mocking

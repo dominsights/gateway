@@ -13,6 +13,7 @@ using PaymentGateway.Authorization.Services;
 using PaymentGateway.Payments.Services;
 using PaymentGateway.Mapper;
 using MongoDbRepository;
+using RabbitMQService;
 
 namespace PaymentGateway
 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PaymentGatewayWorker.CQRS.CommandStack.Commands;
 using PaymentGatewayWorker.Domain.Payments.Services;
+using RabbitMQService;
 
 namespace PaymentGatewayWorker
 {
@@ -20,15 +22,17 @@ namespace PaymentGatewayWorker
         private readonly RabbitMqConsumer _rabbitMqConsumer;
         private readonly IMediator _mediator;
         private readonly SignalRConfig _signalRConfig;
+        private readonly ProcessPaymentAppService _processPaymentAppService;
         HubConnection _connection;
 
 
-        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator, IOptions<SignalRConfig> signalRConfig)
+        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator, IOptions<SignalRConfig> signalRConfig, ProcessPaymentAppService processPaymentAppService)
         {
             _logger = logger;
             _rabbitMqConsumer = rabbitMqConsumer;
             _mediator = mediator;
             _signalRConfig = signalRConfig.Value;
+            _processPaymentAppService = processPaymentAppService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,12 +41,30 @@ namespace PaymentGatewayWorker
             await StartListeningToSignalRAsync(stoppingToken);
 
             // Start listening for new payment requests
-            _rabbitMqConsumer.StartListeningForPaymentRequests();
+            _rabbitMqConsumer.DoWork += StartProcessingPayments;
+            _rabbitMqConsumer.StartListeningForPaymentRequests("payment_queue");
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
             }
+        }
+
+        private async void StartProcessingPayments(string message)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var paymentDto = JsonSerializer.Deserialize<PaymentDto>(message);
+                    _processPaymentAppService.ProcessPayments(paymentDto);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error while processing message.", message);
+                }
+            });
         }
 
         private async Task StartListeningToSignalRAsync(CancellationToken stoppingToken)

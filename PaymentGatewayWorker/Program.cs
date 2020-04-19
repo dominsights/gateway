@@ -20,6 +20,7 @@ using PaymentGatewayWorker.Domain.Payments.Services;
 using System.Runtime.CompilerServices;
 using MongoDbRepository;
 using PaymentGatewayWorker.Domain.Payments.Facades;
+using RabbitMQService;
 
 [assembly: InternalsVisibleTo("PaymentGatewayWorkerUnitTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

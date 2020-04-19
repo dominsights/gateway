@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure", "4 - I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbRepository", "MongoDbRepository\MongoDbRepository.csproj", "{3F374C54-80CD-491F-9075-41912E95E91F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQService", "RabbitMQService\RabbitMQService.csproj", "{BAD20F8E-1F79-4824-BB43-D399D154AF7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{3F374C54-80CD-491F-9075-41912E95E91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F374C54-80CD-491F-9075-41912E95E91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F374C54-80CD-491F-9075-41912E95E91F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +70,7 @@ Global
 		{59AF86AB-1204-44FD-AEC1-CF87E00ECA74} = {CB566D6D-3748-4281-AFC5-42F0A40B0D10}
 		{0A01231D-20FC-4FE7-A0B4-44DC46732830} = {9AA07074-F539-4D64-9907-BFC176F2AB84}
 		{3F374C54-80CD-491F-9075-41912E95E91F} = {B150FBC0-8647-437C-8D21-906990135724}
+		{BAD20F8E-1F79-4824-BB43-D399D154AF7C} = {B150FBC0-8647-437C-8D21-906990135724}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31788721-2DF8-463D-84E1-DFD1AC56C017}

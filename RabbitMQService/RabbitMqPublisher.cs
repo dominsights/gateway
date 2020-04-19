@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PaymentGateway.Payments.Services
+namespace RabbitMQService
 {
-    public class RabbitMqPublisher : IDisposable
+    public class RabbitMqPublisher
     {
-        private const string QUEUE_NAME = "payment_queue";
+        // private const string QUEUE_NAME = "payment_response"; // pass as parameter in the startup file
         private ILogger _logger;
         private ConcurrentDictionary<ulong, string> _outstandingConfirms;
         private RabbitMqConfig _rabbitMQConfig;
@@ -21,7 +21,7 @@ namespace PaymentGateway.Payments.Services
         private IModel _channel;
 
 
-        public virtual Task SendPaymentAsync(string paymentSerialized)
+        public virtual Task SendPaymentAsync(string message, string queueName)
         {
             Task task = new Task(() =>
             {
@@ -38,16 +38,16 @@ namespace PaymentGateway.Payments.Services
                 _channel.BasicAcks += Channel_BasicAcks;
                 _channel.BasicNacks += Channel_BasicNacks;
 
-                _channel.QueueDeclare(queue: QUEUE_NAME, durable: true, exclusive: false,
+                _channel.QueueDeclare(queue: queueName, durable: true, exclusive: false,
                                                   autoDelete: false, arguments: null);
 
-                var body = Encoding.UTF8.GetBytes(paymentSerialized);
+                var body = Encoding.UTF8.GetBytes(message);
 
                 var properties = _channel.CreateBasicProperties();
                 properties.Persistent = true;
 
-                _outstandingConfirms.TryAdd(_channel.NextPublishSeqNo, paymentSerialized);
-                _channel.BasicPublish(exchange: string.Empty, routingKey: QUEUE_NAME,
+                _outstandingConfirms.TryAdd(_channel.NextPublishSeqNo, message);
+                _channel.BasicPublish(exchange: string.Empty, routingKey: queueName,
                                               basicProperties: properties, body: body);
 
                 _channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
