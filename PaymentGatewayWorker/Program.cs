@@ -61,6 +61,7 @@ namespace PaymentGatewayWorker
                     services.AddTransient<BankService>();
                     services.AddTransient<BankResponseRepository>();
                     services.AddTransient<BankApiClientFacade>();
+                    services.AddTransient<RabbitMqPublisher>();
 
                     services.AddMediatR(typeof(Program));
 

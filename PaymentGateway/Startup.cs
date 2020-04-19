@@ -14,6 +14,7 @@ using PaymentGateway.Payments.Services;
 using PaymentGateway.Mapper;
 using MongoDbRepository;
 using RabbitMQService;
+using PaymentGateway.Hubs;
 
 namespace PaymentGateway
 {
@@ -43,7 +44,10 @@ namespace PaymentGateway
             services.Configure<JwtSettings>(config);
             services.Configure<RabbitMqConfig>(rabbitMqConfig);
             services.AddTransient<PaymentReadRepository>();
-
+            services.AddSingleton<IHostedService, PaymentBackgroundService>();
+            services.AddTransient<RabbitMqConsumer>();
+            
+            services.AddSignalR();
             services.AddControllers();
 
             services.AddDbContext<UserAccountDbContext>(options =>
@@ -89,6 +93,7 @@ namespace PaymentGateway
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PaymentResponseHub>("/responseHub");
             });
         }
     }

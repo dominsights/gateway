@@ -6,13 +6,17 @@ namespace RabbitMQService
 {
     public class PaymentResponse
     {
-        public Guid PaymentId { get; }
-        public string Status { get; }
+        public Guid PaymentId { get; set; }
+        public string Status { get; set; }
 
         public PaymentResponse(Guid paymentId, string status)
         {
             PaymentId = paymentId;
             Status = status;
+        }
+        public PaymentResponse()
+        {
+
         }
 
         public override bool Equals(object obj)

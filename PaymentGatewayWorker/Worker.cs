@@ -25,7 +25,6 @@ namespace PaymentGatewayWorker
         private readonly ProcessPaymentAppService _processPaymentAppService;
         HubConnection _connection;
 
-
         public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator, IOptions<SignalRConfig> signalRConfig, ProcessPaymentAppService processPaymentAppService)
         {
             _logger = logger;
@@ -41,8 +40,8 @@ namespace PaymentGatewayWorker
             await StartListeningToSignalRAsync(stoppingToken);
 
             // Start listening for new payment requests
-            _rabbitMqConsumer.DoWork += StartProcessingPayments;
-            _rabbitMqConsumer.StartListeningForPaymentRequests("payment_queue");
+            _rabbitMqConsumer.MessageReceived += ProcessPayment;
+            await _rabbitMqConsumer.StartListeningForPaymentRequestsAsync("payment_queue");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -51,7 +50,7 @@ namespace PaymentGatewayWorker
             }
         }
 
-        private async void StartProcessingPayments(string message)
+        private async void ProcessPayment(string message)
         {
             await Task.Run(() =>
             {
