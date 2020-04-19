@@ -24,7 +24,7 @@ namespace PaymentGateway.Payments.Services
             string paymentSerialized = JsonSerializer.Serialize(dto);
 
             _logger.LogInformation($"Sending payment with id {dto.Id} to messaging service.");
-            await _messagingService.SendPaymentAsync(paymentSerialized, "payment_queue");
+            await _messagingService.SendMessageAsync(paymentSerialized, "payment_queue");
             return dto.Id;
         }
 

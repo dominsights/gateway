@@ -36,10 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\QueryStack\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <OpenApiReference Include="Swagger\BankApi.json" CodeGenerator="NSwagCSharp" Namespace="PaymentGatewayWorker.BankApi" />
   </ItemGroup>
 

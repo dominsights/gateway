@@ -13,15 +13,13 @@ namespace RabbitMQService
 {
     public class RabbitMqPublisher
     {
-        // private const string QUEUE_NAME = "payment_response"; // pass as parameter in the startup file
         private ILogger _logger;
         private ConcurrentDictionary<ulong, string> _outstandingConfirms;
         private RabbitMqConfig _rabbitMQConfig;
         private IConnection _connection;
         private IModel _channel;
 
-
-        public virtual Task SendPaymentAsync(string message, string queueName)
+        public virtual Task SendMessageAsync(string message, string queueName)
         {
             Task task = new Task(() =>
             {

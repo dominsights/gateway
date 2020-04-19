@@ -32,7 +32,7 @@ namespace PaymentGatewayUnitTests
             Assert.NotEqual(id, new Guid());
 
             string serializedPayment = JsonSerializer.Serialize(dto);
-            messagingMock.Verify(m => m.SendPaymentAsync(serializedPayment, It.IsAny<string>()), Times.Once);
+            messagingMock.Verify(m => m.SendMessageAsync(serializedPayment, It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
