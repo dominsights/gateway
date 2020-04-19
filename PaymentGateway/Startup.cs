@@ -15,6 +15,7 @@ using PaymentGateway.Mapper;
 using MongoDbRepository;
 using RabbitMQService;
 using PaymentGateway.Hubs;
+using Microsoft.OpenApi.Models;
 
 namespace PaymentGateway
 {
@@ -49,6 +50,10 @@ namespace PaymentGateway
             
             services.AddSignalR();
             services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Payment Gateway API", Version = "v1", Description = "API used to request payments from your buyers." });
+            });
 
             services.AddDbContext<UserAccountDbContext>(options =>
             {
@@ -94,6 +99,13 @@ namespace PaymentGateway
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<PaymentResponseHub>("/responseHub");
+            });
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Payment Gateway API V1");
             });
         }
     }
