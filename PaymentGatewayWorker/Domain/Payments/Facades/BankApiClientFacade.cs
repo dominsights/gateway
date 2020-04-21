@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PaymentGatewayWorker.BankApi;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -12,7 +13,7 @@ namespace PaymentGatewayWorker.Domain.Payments.Facades
 
         public virtual async Task<Guid> SendPaymentToBankAsync(Payment payment)
         {
-            var body = new PaymentGatewayWorker.Payment
+            var body = new PaymentGatewayWorker.BankApi.Payment
             {
                 Amount = (double)payment.Amount,
                 CardNumber = payment.CardNumber,
