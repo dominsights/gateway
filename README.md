@@ -12,9 +12,10 @@ This project simulates a payment gateway which interacts with a bank api and ret
 
 **Testing:**
 
+  I added a postman collection with some requests you can use to play using Postman;
+
   Registration:
 
-    - I added a postman collection with some requests you can use to play using Postman;
     - First execute Register request;
     - Now execute the Login request and copy the token, i.e, "token-here";
 
