@@ -2,16 +2,10 @@ This project simulates a payment gateway which interacts with a bank api and ret
 
 **How to setup:**
 
-You will need to install the following applications:
+You will need to install docker on your local machine:
 
-- Postgres;
-- MongoDb;
-- RabbitMq;
-- Dotnet core 3;
-
-**Setup database:**
-
-- Restore the database using the file gateway_dump
+- Go to the root of the solution;
+- Execute docker-compose up;
 
 **Projects setup (to run in localhost):**
 
@@ -19,17 +13,7 @@ You will need to install the following applications:
 - Set multiple projects to startup (PaymentGateway, PaymentGatewayWorker and BankSimulator);
 - Go to Tools -> Options -> Debugging - Check the box "Automatically close console when debugging" (if you don't like having to close the console window everytime);
 
-Configuration for PaymentGateway:
-
-- Configure mongodb url / port in PaymentGateway/appSettings.json;
-- Configure postgres connection string in PaymentGateway/appSettings.json;
-- Add rabbitMq settings (if not using the defaults);
-
 Configuration for PaymentGatewayWorker: 
-
-- Configure mongodb url / port in PaymentGatewayWorker/appSettings.json;
-- Configure postgres connection string in PaymentGatewayWorker/appSettings.json;
-- Add rabbitMq settings (if not using the defaults);
 - Configure the url for the Bank Simulator SignalR Hub (optional if you are using the IISExpress configuration);
 
 **Testing:**
