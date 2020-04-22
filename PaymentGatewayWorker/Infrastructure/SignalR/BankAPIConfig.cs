@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PaymentGatewayWorker
 {
-    public class SignalRConfig
+    public class BankAPIConfig
     {
         public string ServerUrl { get; set; }
     }

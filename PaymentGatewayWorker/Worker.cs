@@ -18,14 +18,15 @@ namespace PaymentGatewayWorker
 {
     class Worker : BackgroundService
     {
+        private const string PAYMENT_HUB = "paymentHub";
         private readonly ILogger<Worker> _logger;
         private readonly RabbitMqConsumer _rabbitMqConsumer;
         private readonly IMediator _mediator;
-        private readonly SignalRConfig _signalRConfig;
+        private readonly BankAPIConfig _signalRConfig;
         private readonly ProcessPaymentAppService _processPaymentAppService;
         HubConnection _connection;
 
-        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator, IOptions<SignalRConfig> signalRConfig, ProcessPaymentAppService processPaymentAppService)
+        public Worker(ILogger<Worker> logger, RabbitMqConsumer rabbitMqConsumer, IMediator mediator, IOptions<BankAPIConfig> signalRConfig, ProcessPaymentAppService processPaymentAppService)
         {
             _logger = logger;
             _rabbitMqConsumer = rabbitMqConsumer;
@@ -70,7 +71,7 @@ namespace PaymentGatewayWorker
         {
             _connection = new HubConnectionBuilder()
                          .WithAutomaticReconnect()
-                         .WithUrl(_signalRConfig.ServerUrl)
+                         .WithUrl(_signalRConfig.ServerUrl + PAYMENT_HUB)
                          .Build();
 
             _connection.On<PaymentHubResponse>("PaymentResponse", (response) =>

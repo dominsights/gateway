@@ -52,8 +52,9 @@ namespace PaymentGateway.Payments.Controllers
 
                 return Ok(paymentDetails);
             }
-            catch
+            catch(Exception e)
             {
+                _logger.LogError(e, "Error while trying to retrieve payment details.");
                 return BadRequest();
             }
         }

@@ -1,4 +1,5 @@
-﻿using PaymentGatewayWorker.BankApi;
+﻿using Microsoft.Extensions.Options;
+using PaymentGatewayWorker.BankApi;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -27,10 +28,16 @@ namespace PaymentGatewayWorker.Domain.Payments.Facades
             return await _bankApiClient.PaymentAsync(body);
         }
 
-        public BankApiClientFacade()
+        public BankApiClientFacade(IOptions<BankAPIConfig> signalRConfig)
         {
             var httpClient = new HttpClient();
-           _bankApiClient = new BankApiClient("https://localhost:5001/", httpClient);
+           _bankApiClient = new BankApiClient(signalRConfig.Value.ServerUrl, httpClient);
+        }
+
+        // Necessary for mocking
+        protected BankApiClientFacade()
+        {
+
         }
     }
 }
