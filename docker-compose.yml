@@ -1,4 +1,4 @@
-version: "3.4"
+version: '3.4'
 
 services:
   sqldata:
@@ -8,7 +8,6 @@ services:
     env_file:
       - sqldata.env
     volumes:
-      - sqldata-data:/var/lib/postgresql/data/
       - ./gateway_schema.sql:/docker-entrypoint-initdb.d/gateway_schema.sql
 
   nosqldata:
@@ -21,30 +20,30 @@ services:
     ports:
       - "5672:5672"
 
-  # payment-gateway-worker:
-  #   build:
-  #     context: .
-  #     dockerfile: PaymentGatewayWorker/Dockerfile
-  #   depends_on:
-  #     - sqldata
-  #     - rabbitmq
-  #     - nosqldata
+  paymentgateway:
+    image: ${DOCKER_REGISTRY-}paymentgateway
+    build:
+      context: .
+      dockerfile: PaymentGateway/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq
+      - nosqldata
 
-  # payment-gateway:
-  #   build:
-  #     context: .
-  #     dockerfile: PaymentGateway/Dockerfile
-  #   depends_on:
-  #     - sqldata
-  #     - rabbitmq
-  #     - nosqldata
-  #   ports:
-  #     - "44368:80"
+  banksimulator:
+    image: ${DOCKER_REGISTRY-}banksimulator
+    build:
+      context: .
+      dockerfile: BankSimulator/Dockerfile
 
-  # bank-simulator:
-  #   build:
-  #     context: .
-  #     dockerfile: BankSimulator/Dockerfile
+  paymentgatewayworker:
+    image: ${DOCKER_REGISTRY-}paymentgatewayworker
+    build:
+      context: .
+      dockerfile: PaymentGatewayWorker/Dockerfile
+    depends_on:
+      - sqldata
+      - rabbitmq
+      - nosqldata
+      - banksimulator
 
-volumes:
-  sqldata-data:

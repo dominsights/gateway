@@ -21,9 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankSimulator", "BankSimula
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure", "4 - Infrastructure", "{B150FBC0-8647-437C-8D21-906990135724}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDbRepository", "MongoDbRepository\MongoDbRepository.csproj", "{3F374C54-80CD-491F-9075-41912E95E91F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbRepository", "MongoDbRepository\MongoDbRepository.csproj", "{3F374C54-80CD-491F-9075-41912E95E91F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQService", "RabbitMQService\RabbitMQService.csproj", "{BAD20F8E-1F79-4824-BB43-D399D154AF7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQService", "RabbitMQService\RabbitMQService.csproj", "{BAD20F8E-1F79-4824-BB43-D399D154AF7C}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1CC10940-F379-42CD-A5DD-A4A17B02E2E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD20F8E-1F79-4824-BB43-D399D154AF7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CC10940-F379-42CD-A5DD-A4A17B02E2E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CC10940-F379-42CD-A5DD-A4A17B02E2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CC10940-F379-42CD-A5DD-A4A17B02E2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CC10940-F379-42CD-A5DD-A4A17B02E2E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

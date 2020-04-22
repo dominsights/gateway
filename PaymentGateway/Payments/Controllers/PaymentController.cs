@@ -28,13 +28,6 @@ namespace PaymentGateway.Payments.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Payment
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET: api/Payment/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<IActionResult> Get(Guid id)

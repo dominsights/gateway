@@ -99,7 +99,7 @@ namespace PaymentGatewayWorker
                 catch
                 {
                     Debug.Assert(_connection.State == HubConnectionState.Disconnected);
-                    _logger.LogError($"Trying to connect to {_signalRConfig.ServerUrl} failed. Check if the url is correct and update the appSettings value to the correct one.");
+                    _logger.LogError($"Trying to connect to {_signalRConfig.ServerUrl + PAYMENT_HUB} failed. Check if the url is correct and update the appSettings value to the correct one.");
                     await Task.Delay(5000);
                 }
             }
