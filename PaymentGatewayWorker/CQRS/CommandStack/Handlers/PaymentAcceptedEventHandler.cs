@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
 {
-    class PaymentAcceptedHandler : INotificationHandler<PaymentAcceptedEvent>
+    class PaymentAcceptedEventHandler : INotificationHandler<PaymentAcceptedEvent>
     {
         private readonly RabbitMqPublisher _rabbitMqPublisher;
-        private readonly ILogger<PaymentAcceptedHandler> _logger;
+        private readonly ILogger<PaymentAcceptedEventHandler> _logger;
 
         public async Task Handle(PaymentAcceptedEvent notification, CancellationToken cancellationToken)
         {
@@ -29,7 +29,7 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
             }
         }
 
-        public PaymentAcceptedHandler(RabbitMqPublisher rabbitMqPublisher, ILogger<PaymentAcceptedHandler> logger)
+        public PaymentAcceptedEventHandler(RabbitMqPublisher rabbitMqPublisher, ILogger<PaymentAcceptedEventHandler> logger)
         {
             _rabbitMqPublisher = rabbitMqPublisher;
             _logger = logger;

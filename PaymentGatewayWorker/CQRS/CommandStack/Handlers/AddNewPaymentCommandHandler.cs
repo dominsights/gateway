@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
 {
-    class AddNewPaymentHandler : IRequestHandler<AddNewPaymentCommand>
+    class AddNewPaymentCommandHandler : IRequestHandler<AddNewPaymentCommand>
     {
         private IRepository _repository;
         private IMediator _mediator;
@@ -32,7 +32,7 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
             return Unit.Value;
         }
 
-        public AddNewPaymentHandler(IRepository repository, IMediator mediator)
+        public AddNewPaymentCommandHandler(IRepository repository, IMediator mediator)
         {
             _repository = repository;
             _mediator = mediator;

@@ -24,7 +24,7 @@ namespace PaymentGatewayWorkerUnitTests
                 .Returns(Task.FromResult(new PaymentGatewayWorker.Domain.Payments.CommandResponse(true)));
 
             var mediator = new Mock<IMediator>();
-            var handler = new AddNewPaymentHandler(repository.Object, mediator.Object);
+            var handler = new AddNewPaymentCommandHandler(repository.Object, mediator.Object);
 
             var fixture = new Fixture();
 
@@ -45,7 +45,7 @@ namespace PaymentGatewayWorkerUnitTests
                 .Returns(Task.FromResult(new PaymentGatewayWorker.Domain.Payments.CommandResponse()));
 
             var mediator = new Mock<IMediator>();
-            var handler = new AddNewPaymentHandler(repository.Object, mediator.Object);
+            var handler = new AddNewPaymentCommandHandler(repository.Object, mediator.Object);
 
             var fixture = new Fixture();
 

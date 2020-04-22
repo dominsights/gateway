@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
 {
-    class PaymentCreatedHandler : INotificationHandler<PaymentCreatedEvent>
+    class PaymentCreatedEventHandler : INotificationHandler<PaymentCreatedEvent>
     {
         private BankResponseRepository _bankResponseRepository;
         private IMediator _mediator;
-        private ILogger<PaymentCreatedHandler> _logger;
+        private ILogger<PaymentCreatedEventHandler> _logger;
         private BankService _bankService;
         private PaymentRepository _paymentRepository;
         private IMapper _mapper;
@@ -51,7 +51,7 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Handlers
             }
         }
 
-        public PaymentCreatedHandler(BankResponseRepository bankResponseRepository, IMediator mediator, ILogger<PaymentCreatedHandler> logger, BankService bankService, PaymentRepository paymentRepository, IMapper mapper)
+        public PaymentCreatedEventHandler(BankResponseRepository bankResponseRepository, IMediator mediator, ILogger<PaymentCreatedEventHandler> logger, BankService bankService, PaymentRepository paymentRepository, IMapper mapper)
         {
             _bankResponseRepository = bankResponseRepository;
             _mediator = mediator;

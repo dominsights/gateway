@@ -21,12 +21,12 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44368/api/auth/login",
+					"raw": "https://localhost:44378/api/auth/login",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "44368",
+					"port": "44378",
 					"path": [
 						"api",
 						"auth",
@@ -52,12 +52,12 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44368/api/auth/register",
+					"raw": "https://localhost:44378/api/auth/register",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "44368",
+					"port": "44378",
 					"path": [
 						"api",
 						"auth",
@@ -75,7 +75,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVkYmMzZmZkLTdmNmEtNGM5Ni05ZGNjLTg2NjQzYTEyNWViZSIsIm5iZiI6MTU4NzIwNjMwNiwiZXhwIjoxNTg3Mzc5MTA2LCJpYXQiOjE1ODcyMDYzMDYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJ9.UbNYRUBeEr45xAORY1d94lhk6nx_J-vR0OQ9mdN0cNJi7VBsZjVMEj8NhJypkLgJgYDB8808W3E7sYMHkDMwdhV5dmiTKtSc6pPd1PC_YcOsD3VmgNCbEAxtn3iiIyjc6oQCwZZdUuFBZpo-edBkvd2uysN_9q-ymQiI1sQ4ziSXIjguMmDacsWJDi9ba98YDMpUgBxtw75dq92M77CDJ6rYPl2CocnpwQUTjZgtLJ8yFjOpyNls7gIJDGLQ7fQjdByCOhEwTUP_MuLjdDc_Q7OLdV3dCmjB_Qx5DH1xtC982-0vkRk6NzGgKHKfEa2kl1DBqmaWUsxnnI-Tzcl-3A",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImM3YjAwY2MyLTljOTEtNDk1Ni05ODdlLTU4ZjAzODIyMzc4OSIsIm5iZiI6MTU4NzU4MDIwMCwiZXhwIjoxNTg3NzUzMDAwLCJpYXQiOjE1ODc1ODAyMDAsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJ9.IHYBlIcSLkk2Nil5FO0cZuvvU99WAzJTeRDpULfdP421DFEgZB0KffMfZRq2qOs783CmaQP3f_oP7AxQ__6YHvX8apTDKYrL7kNQYZjvG_OnP5p_fBqK6fIPM1XlpWy8lcUooNG2mkF4mBzGH26-s8HVWlhufShyHndDfv8GuSMBkPVL3P5P1h5TjmQ1RPrP1Msjmnfx7LJcHbenUFGIBp-myn7py94PXa9Q58TuZiB5xVKuRXglPCDExS44x91LDKMy1nLNniWKb5xr-1ljQiyN6SVA3gkfs7peR0gnES5fWqnbJLt4GP6k7dKZjmHMMGQcHub74hlMXKUpu69pVg",
 							"type": "string"
 						}
 					]
@@ -84,7 +84,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"cardNumber\": \"4532517464958844\",\n\t\"expiryMonth\": 10,\n\t\"expiryYear\": 23,\n\t\"amount\": 15.03,\n\t\"currencyCode\": \"EUR\",\n\t\"cvv\": \"078\"\n}",
+					"raw": "{\n\t\"cardNumber\": \"4532517464958844\",\n\t\"expiryMonth\": 10,\n\t\"expiryYear\": 23,\n\t\"amount\": 10.03,\n\t\"currencyCode\": \"EUR\",\n\t\"cvv\": \"078\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -92,12 +92,12 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:44368/api/payment",
+					"raw": "https://localhost:44378/api/payment",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "44368",
+					"port": "44378",
 					"path": [
 						"api",
 						"payment"
@@ -114,7 +114,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImVkYmMzZmZkLTdmNmEtNGM5Ni05ZGNjLTg2NjQzYTEyNWViZSIsIm5iZiI6MTU4NzIwNjMwNiwiZXhwIjoxNTg3Mzc5MTA2LCJpYXQiOjE1ODcyMDYzMDYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJ9.UbNYRUBeEr45xAORY1d94lhk6nx_J-vR0OQ9mdN0cNJi7VBsZjVMEj8NhJypkLgJgYDB8808W3E7sYMHkDMwdhV5dmiTKtSc6pPd1PC_YcOsD3VmgNCbEAxtn3iiIyjc6oQCwZZdUuFBZpo-edBkvd2uysN_9q-ymQiI1sQ4ziSXIjguMmDacsWJDi9ba98YDMpUgBxtw75dq92M77CDJ6rYPl2CocnpwQUTjZgtLJ8yFjOpyNls7gIJDGLQ7fQjdByCOhEwTUP_MuLjdDc_Q7OLdV3dCmjB_Qx5DH1xtC982-0vkRk6NzGgKHKfEa2kl1DBqmaWUsxnnI-Tzcl-3A",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImM3YjAwY2MyLTljOTEtNDk1Ni05ODdlLTU4ZjAzODIyMzc4OSIsIm5iZiI6MTU4NzU4MDIwMCwiZXhwIjoxNTg3NzUzMDAwLCJpYXQiOjE1ODc1ODAyMDAsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMCJ9.IHYBlIcSLkk2Nil5FO0cZuvvU99WAzJTeRDpULfdP421DFEgZB0KffMfZRq2qOs783CmaQP3f_oP7AxQ__6YHvX8apTDKYrL7kNQYZjvG_OnP5p_fBqK6fIPM1XlpWy8lcUooNG2mkF4mBzGH26-s8HVWlhufShyHndDfv8GuSMBkPVL3P5P1h5TjmQ1RPrP1Msjmnfx7LJcHbenUFGIBp-myn7py94PXa9Q58TuZiB5xVKuRXglPCDExS44x91LDKMy1nLNniWKb5xr-1ljQiyN6SVA3gkfs7peR0gnES5fWqnbJLt4GP6k7dKZjmHMMGQcHub74hlMXKUpu69pVg",
 							"type": "string"
 						}
 					]
@@ -122,16 +122,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:44368/api/payment/9a1cd663-99f3-4682-a195-bb80eb2b68be",
+					"raw": "https://localhost:44378/api/payment/f9e02f08-79ea-49ff-9a28-6211bad2fc11",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "44368",
+					"port": "44378",
 					"path": [
 						"api",
 						"payment",
-						"9a1cd663-99f3-4682-a195-bb80eb2b68be"
+						"f9e02f08-79ea-49ff-9a28-6211bad2fc11"
 					]
 				}
 			},

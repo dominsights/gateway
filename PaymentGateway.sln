@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - PaymentGateway", "1 - P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - PaymentGatewayWorker", "2 - PaymentGatewayWorker", "{CB566D6D-3748-4281-AFC5-42F0A40B0D10}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Simulator", "3 - Simulator", "{9AA07074-F539-4D64-9907-BFC176F2AB84}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Simulator", "4 - Simulator", "{9AA07074-F539-4D64-9907-BFC176F2AB84}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankSimulator", "BankSimulator\BankSimulator.csproj", "{0A01231D-20FC-4FE7-A0B4-44DC46732830}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure", "4 - Infrastructure", "{B150FBC0-8647-437C-8D21-906990135724}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infrastructure", "3 - Infrastructure", "{B150FBC0-8647-437C-8D21-906990135724}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MongoDbRepository", "MongoDbRepository\MongoDbRepository.csproj", "{3F374C54-80CD-491F-9075-41912E95E91F}"
 EndProject

@@ -26,12 +26,12 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
         {
             var bankResponseRepository = new Mock<BankResponseRepository>();
             var mediator = new Mock<IMediator>();
-            var logger = new Mock<ILogger<PaymentCreatedHandler>>();
+            var logger = new Mock<ILogger<PaymentCreatedEventHandler>>();
             var bankService = new Mock<BankService>();
             var paymentRepository = new Mock<PaymentRepository>();
             var mapper = new Mock<IMapper>();
 
-            var handler = new PaymentCreatedHandler(bankResponseRepository.Object, mediator.Object, logger.Object, bankService.Object, paymentRepository.Object, mapper.Object);
+            var handler = new PaymentCreatedEventHandler(bankResponseRepository.Object, mediator.Object, logger.Object, bankService.Object, paymentRepository.Object, mapper.Object);
 
             var fixture = new Fixture();
 
@@ -51,13 +51,13 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
         {
             var bankResponseRepository = new Mock<BankResponseRepository>();
             var mediator = new Mock<IMediator>();
-            var logger = new Mock<ILogger<PaymentCreatedHandler>>();
+            var logger = new Mock<ILogger<PaymentCreatedEventHandler>>();
             var paymentRepository = new Mock<PaymentRepository>();
             var mapper = new Mock<IMapper>();
             var bankService = new Mock<BankService>();
             bankService.Setup(b => b.SendPaymentForBankApprovalAsync(It.IsAny<PaymentGatewayWorker.Domain.Payments.Payment>())).Throws(new Exception());
 
-            var handler = new PaymentCreatedHandler(bankResponseRepository.Object, mediator.Object, logger.Object, bankService.Object, paymentRepository.Object, mapper.Object);
+            var handler = new PaymentCreatedEventHandler(bankResponseRepository.Object, mediator.Object, logger.Object, bankService.Object, paymentRepository.Object, mapper.Object);
 
             var fixture = new Fixture();
 

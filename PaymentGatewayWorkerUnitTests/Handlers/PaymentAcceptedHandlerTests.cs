@@ -20,7 +20,7 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
             var fixture = new Fixture();
             var notification = fixture.Build<PaymentAcceptedEvent>().Create();
             Mock<RabbitMqPublisher> rabbitMqPublisher = new Mock<RabbitMqPublisher>();
-            var handler = new PaymentAcceptedHandler(rabbitMqPublisher.Object, new Mock<ILogger<PaymentAcceptedHandler>>().Object);
+            var handler = new PaymentAcceptedEventHandler(rabbitMqPublisher.Object, new Mock<ILogger<PaymentAcceptedEventHandler>>().Object);
             handler.Handle(notification, new CancellationToken()).Wait();
 
             rabbitMqPublisher.Verify(r => r.SendMessageAsync(It.IsAny<string>(), "response_queue"), Times.Once);
@@ -33,9 +33,9 @@ namespace PaymentGatewayWorkerUnitTests.Handlers
             var notification = fixture.Build<PaymentAcceptedEvent>().Create();
             Mock<RabbitMqPublisher> rabbitMqPublisher = new Mock<RabbitMqPublisher>();
             rabbitMqPublisher.Setup(r => r.SendMessageAsync(It.IsAny<string>(), It.IsAny<string>())).ThrowsAsync(new Exception());
-            Mock<ILogger<PaymentAcceptedHandler>> logger = new Mock<ILogger<PaymentAcceptedHandler>>();
+            Mock<ILogger<PaymentAcceptedEventHandler>> logger = new Mock<ILogger<PaymentAcceptedEventHandler>>();
 
-            var handler = new PaymentAcceptedHandler(rabbitMqPublisher.Object, logger.Object);
+            var handler = new PaymentAcceptedEventHandler(rabbitMqPublisher.Object, logger.Object);
             Assert.ThrowsAsync<Exception>(() => handler.Handle(notification, new CancellationToken()));
 
             // Nothing more to assert?

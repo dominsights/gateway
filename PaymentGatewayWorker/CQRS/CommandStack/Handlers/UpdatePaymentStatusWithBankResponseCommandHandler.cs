@@ -18,9 +18,9 @@ using MongoDbRepository;
 
 namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
 {
-    class UpdatePaymentStatusWithBankResponseHandler : IRequestHandler<UpdatePaymentStatusWithBankResponseCommand>
+    class UpdatePaymentStatusWithBankResponseCommandHandler : IRequestHandler<UpdatePaymentStatusWithBankResponseCommand>
     {
-        private ILogger<UpdatePaymentStatusWithBankResponseHandler> _logger;
+        private ILogger<UpdatePaymentStatusWithBankResponseCommandHandler> _logger;
         private IMediator _mediator;
         private PaymentService _paymentService;
         private PaymentRepository _paymentRepository;
@@ -50,7 +50,7 @@ namespace PaymentGatewayWorker.CQRS.CommandStack.Sagas
             return Unit.Value;
         }
 
-        public UpdatePaymentStatusWithBankResponseHandler(IMediator mediator, ILogger<UpdatePaymentStatusWithBankResponseHandler> logger, PaymentService paymentService, PaymentRepository paymentRepository)
+        public UpdatePaymentStatusWithBankResponseCommandHandler(IMediator mediator, ILogger<UpdatePaymentStatusWithBankResponseCommandHandler> logger, PaymentService paymentService, PaymentRepository paymentRepository)
         {
             _logger = logger;
             _mediator = mediator;
