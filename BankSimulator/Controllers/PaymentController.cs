@@ -7,6 +7,7 @@ using BankSimulator.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace BankSimulator.Controllers
 {
@@ -14,6 +15,7 @@ namespace BankSimulator.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
+        private ILogger<PaymentController> _logger;
         private IHubContext<PaymentHub> _hubContext;
 
         // GET: api/Payment/5
@@ -40,6 +42,8 @@ namespace BankSimulator.Controllers
                 Status = Status.APPROVED
             };
 
+            _logger.LogInformation($"Payment received for seller {payment.SellerId}.");
+
             // Calls the SignalR client to send response
             Task.Run(async () =>
             {
@@ -51,8 +55,9 @@ namespace BankSimulator.Controllers
             return id;
         }
 
-        public PaymentController(IHubContext<PaymentHub> hubContext)
+        public PaymentController(IHubContext<PaymentHub> hubContext, ILogger<PaymentController> logger)
         {
+            _logger = logger;
             _hubContext = hubContext;
         }
     }
